@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1" />
+	<title>CountDownLatch</title>
+    <style type="text/css"><!--
+    body{
+        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
+        font-size : 20px;
+        width : 1080px;
+    }
+-->
+	</style>	
+</head>
+<body>
+<p><strong>What is CountDownLatch in Java</strong><br />
+CountDownLatch in Java is a kind of synchronizer which allows one Thread&nbsp; to wait for one or more Threads before starts processing. This is very crucial requirement and often needed in server side core Java application and having this functionality built-in as CountDownLatch greatly simplifies the development. CountDownLatch in Java is introduced on Java 5 along with other concurrent utilities like CyclicBarrier, Semaphore, ConcurrentHashMap and BlockingQueue in java.util.concurrent package. In this Java concurrency tutorial we will&nbsp; what is CountDownLatch in Java, How CountDownLatch works in Java, an example of CountDownLatch in Java and finally some worth noting points about this concurrent utility. You can also implement same functionality using&nbsp; wait and notify mechanism in Java but it requires lot of code and getting it write in first attempt is tricky,&nbsp; With CountDownLatch it can&nbsp; be done in just few lines. CountDownLatch also allows flexibility on number of thread for which main thread should wait, It can wait for one thread or n number of thread, there is not much change on code.&nbsp; Key point is that you need to figure out where to use CountDownLatch in Java application which is not difficult if you understand What is CountDownLatch in Java, What does CountDownLatch do and How CountDownLatch works in Java.</p>
+
+<p><br />
+<strong>How CountDownLatch works in Java</strong><br />
+CountDownLatch Example in Java 5 6 7Now we know What is CountDownLatch in Java, its time to find out How CountDownLatch works in Java. CountDownLatch works in latch principle,&nbsp; main thread will wait until Gate is open. One thread waits for n number of threads specified while creating CountDownLatch in Java. Any thread, usually main thread of application,&nbsp; which calls CountDownLatch.await() will wait until count reaches zero or its interrupted by another Thread. All other thread are required to do count down by calling CountDownLatch.countDown() once they are completed or ready to the job. as soon as count reaches zero, Thread awaiting starts running. One of the disadvantage of CountDownLatch is that its not reusable once count reaches to zero you can not use CountDownLatch any more, but don&#39;t worry Java concurrency API has another concurrent utility called CyclicBarrier for such requirements.</p>
+
+<p><strong>CountDownLatch Exmaple in Java</strong></p>
+
+<p>In this section we will see a full featured real world example of using CountDownLatch in Java. In following CountDownLatch example, Java program requires 3 services namely CacheService, AlertService&nbsp; and ValidationService&nbsp; to be started and ready before application can handle any request and this is achieved by using CountDownLatch in Java.</p>
+
+<p style="margin-left: 80px;">import java.util.Date;<br />
+import java.util.concurrent.CountDownLatch;<br />
+import java.util.logging.Level;<br />
+import java.util.logging.Logger;</p>
+
+<p style="margin-left: 80px;">/**<br />
+&nbsp;* Java program to demonstrate How to use CountDownLatch in Java. CountDownLatch is<br />
+&nbsp;* useful if you want to start main processing thread once its dependency is completed<br />
+&nbsp;* as illustrated in this CountDownLatch Example<br />
+&nbsp;*<br />
+&nbsp;* @author Javin Paul<br />
+&nbsp;*/<br />
+public class CountDownLatchDemo {</p>
+
+<p style="margin-left: 80px;">&nbsp;&nbsp;&nbsp; public static void main(String args[]) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>&nbsp; final CountDownLatch latch = new CountDownLatch(3);</strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Thread cacheService = new Thread(new Service(&quot;CacheService&quot;, 1000, latch));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Thread alertService = new Thread(new Service(&quot;AlertService&quot;, 1000, latch));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Thread validationService = new Thread(new Service(&quot;ValidationService&quot;, 1000, latch));<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cacheService.start(); //separate thread will initialize CacheService<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alertService.start(); //another thread for AlertService initialization<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; validationService.start();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // application should not start processing any thread until all service is up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // and ready to do there job.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Countdown latch is idle choice here, main thread will start with count 3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // and wait until count reaches zero. each thread once up and read will do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // a count down. this will ensure that main thread is not started processing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // until all services is up.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //count is 3 since we have 3 Threads (Services)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong> latch.await();&nbsp; //main thread is waiting on CountDownLatch to finish</strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;All services are up, Application is starting now&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }catch(InterruptedException ie){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ie.printStackTrace();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;<br />
+}</p>
+
+<p style="margin-left: 80px;">/**<br />
+&nbsp;* Service class which will be executed by Thread using CountDownLatch synchronizer.<br />
+&nbsp;*/<br />
+class Service implements Runnable{<br />
+&nbsp;&nbsp;&nbsp; private final String name;<br />
+&nbsp;&nbsp;&nbsp; private final int timeToStart;<br />
+&nbsp;&nbsp;&nbsp; private final CountDownLatch latch;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; public Service(String name, int timeToStart, CountDownLatch latch){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name = name;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.timeToStart = timeToStart;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.latch = latch;<br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; @Override<br />
+&nbsp;&nbsp;&nbsp; public void run() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Thread.sleep(timeToStart);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } catch (InterruptedException ex) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Logger.getLogger(Service.class.getName()).log(Level.SEVERE, null, ex);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println( name + &quot; is Up&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>&nbsp; latch.countDown(); //reduce count of CountDownLatch by 1</strong><br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;<br />
+}</p>
+
+<p style="margin-left: 80px;">Output:<br />
+ValidationService is Up<br />
+AlertService is Up<br />
+CacheService is Up<br />
+All services are up, Application is starting now</p>
+
+<p>By looking at output of this CountDownLatch example in Java, you can see that Application is not started until all services started by individual Threads are completed.</p>
+
+<p><strong>When should we use CountDownLatch in Java :</strong></p>
+
+<p>Use CountDownLatch when one of Thread like main thread, require to wait for one or more thread to complete, before its start doing processing. Classical example of using CountDownLatch in Java&nbsp; is any server side core Java application which uses services architecture,&nbsp; where multiple services is provided by multiple threads and application can not start processing&nbsp; until all services have started successfully as shown in our CountDownLatch example.</p>
+
+<p><br />
+<strong>CountDownLatch in Java &ndash; Things to remember</strong><br />
+Few points about Java CountDownLatch which is worth remembering:</p>
+
+<p>1) You can not reuse CountDownLatch once count is reaches to zero, this is the main difference between CountDownLatch and CyclicBarrier, which is frequently asked in core Java interviews and multi-threading&nbsp; interviews.</p>
+
+<p>2) Main Thread wait on Latch by calling CountDownLatch.await() method while other thread calls CountDownLatch.countDown() to inform that they have completed.</p>
+
+<p>That&rsquo;s all on What is CountDownLatch in Java, What does CountDownLatch do in Java, How CountDownLatch works in Java along with a real life CountDownLatch example in Java. This is a very useful concurrency utility and if you master when to use CountDownLatch and how to use CountDownLatch you will be able to reduce good amount of complex concurrency control code written using wait and notify in Java.</p>
+
+<p><br />
+Read more: http://javarevisited.blogspot.com/2012/07/countdownlatch-example-in-java.html#ixzz3ca2o9diX</p>
+</body>
+</html>

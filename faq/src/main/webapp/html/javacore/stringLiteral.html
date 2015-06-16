@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1" />
+	<title>String Literal</title>
+    <style type="text/css"><!--
+    body{
+        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
+        font-size : 20px;
+        width : 1080px;
+    }
+-->
+	</style>	
+</head>
+<body>
+<p><strong>Difference between String literal and New String object in Java</strong></p>
+
+<p>For example, what is the difference between String object created in following two expression :</p>
+
+<p><strong>String strObject = new String(&quot;Java&quot;);</strong><br />
+and<br />
+<strong>String strLiteral = &quot;Java&quot;;</strong></p>
+
+<p>Both expression gives you String object, but there is subtle difference between them.</p>
+
+<p>When you create String object using new() operator, it always create a new <strong>object in heap memory</strong>. On the other hand, if you create object using String literal syntax e.g. &quot;Java&quot;, it may return an existing object from String pool (a cache of String object in Perm gen space, which is now moved to heap space in recent Java release), if it&#39;s already exists. Otherwise it will create a new string object and put in string pool for future re-use.</p>
+
+<p><strong>What is String literal and String Pool</strong></p>
+
+<p>Since String is one of the most used type in any application, Java designer took a step further to optimize uses of this class. They know that Strings will not going to be cheap, and that&#39;s why they come up with an idea to <strong>cache all String instances </strong>created inside double quotes e.g. &quot;Java&quot;. These double quoted literal is known as String literal and the cache which stored these String instances are known as as String pool. In earlier version of Java, I think up-to Java 1.6 String pool is located in permgen area of heap, but in Java 1.7 updates its moved to main heap area. Earlier since it was in PermGen space, it was always a risk to create too many String object, because its a very limited space, default size 64 MB and used to store class metadata e.g. .class files. Creating too many String literals can cause java.lang.OutOfMemory: permgen space. Now because String pool is moved to a much larger memory space, it&#39;s much more safe. By the way, don&#39;t misuse memory here, always try to minimize temporary String object e.g. &quot;a&quot;, &quot;b&quot; and then &quot;ab&quot;. Always use StringBuilder to deal with temporary String object.</p>
+
+<p><br />
+<strong>Difference between String literal and String object</strong></p>
+
+<p><img src="../../img/StringLiteralVSStringObjectInJava.png" /></p>
+
+<p>&nbsp;</p>
+
+<p>At high level both are String object, but main difference comes from the point that new() operator always creates a new String object. Also when you create String using literal they are interned. This will be much more clear when you compare two String objects created using String literal and new operator, as shown in below example :</p>
+
+<p>String a = &quot;Java&quot;;<br />
+String b = &quot;Java&quot;;<br />
+System.out.println(a == b);&nbsp; // True</p>
+
+<p>Here two different objects are created and they have different references:</p>
+
+<p>String c = new String(&quot;Java&quot;);<br />
+String d = new String(&quot;Java&quot;);<br />
+System.out.println(c == d);&nbsp; // False</p>
+
+<p>Similarly when you compare a String literal with an String object created using new() operator using == operator, it will return false, as shown below :</p>
+
+<p>String e = &quot;JDK&quot;;<br />
+String f =&nbsp; new String(&quot;JDK&quot;);<br />
+System.out.println(e == f);&nbsp; // False</p>
+
+<p>In general you should use the string literal notation when possible. It is easier to read and it gives the compiler a chance to optimize your code. By the way any answer to this question is incomplete until you explain what is String interning, so let&#39;s see that in next section.</p>
+
+<p><strong>String interning using inter() method</strong><br />
+Java by default doesn&#39;t put all String object into String pool, instead they gives you flexibility to explicitly store any arbitrary object in String pool. You can put any object to String pool by calling <strong>intern()</strong> method of java.lang.String class. Though, when you create using String literal notation of Java, it automatically call intern() method to put that object into String pool, provided it was not present in the pool already. This is another difference between string literal and new string, because in case of new, interning doesn&#39;t happen automatically, until you call intern() method on that object. Also don&#39;t forget to use StringBuffer and StringBuilder for string concatenation, they will reduce number</p>
+
+<p><br />
+That&#39;s all about this question, what is difference between String literal and String object in Java. Always remember that literal Strings are returned from string pool and Java put them in pool if not stored already. This difference is most obvious, when you compare two String objects using equality operator (==). That&#39;s why it&#39;s suggested as always compare two String object using equals() method and never compare them using == operator, because you never know which one is coming from pool and which one is created using new() operator. If you know the difference between string object and string literal, you can also solve questions from Java written test, which also test this concept. It&#39;s something, every Java programmer should know.&nbsp; of temporary String object in heap space</p>
+</body>
+</html>

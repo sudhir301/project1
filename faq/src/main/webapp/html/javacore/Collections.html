@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1" />
+	<title>Collections</title>
+    <style type="text/css"><!--
+    body{
+        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
+        font-size : 20px;
+        width : 1080px;
+    }
+-->
+	</style>
+</head>
+<body>
+<h1 style="text-align: center;"><strong>Java Collections : Internal Working</strong></h1>
+
+<p><strong>Java Collections:</strong></p>
+
+<p>Java Collection internally uses the primitive and core elements like Arrays etc. So if you are asked a question to explain the internal working of any of the Collection classes, don&#39;t be surprised. Be it an interview for an Junior Java developer or even for an Architect, Java Collection is always something that you will have on you plate.</p>
+
+<p>Java provides many collection classes that can be used to store data. Knowing which collection class to use for best performance and optimum result is the key.</p>
+
+<p>First the basics.<br />
+Below two image shows the complete hierarchy of interfaces and classes present in the Collection framework.</p>
+
+<p><img src="../../img/Collection-Classes.jpg" width="500" /></p>
+
+<p><br />
+The Collections come in basic four flavours:<br />
+<strong>Lists </strong>: List of things ( Classes that implement List Interface)<br />
+<strong>Sets </strong>: Unique things ( Classes that implement Set Interface)<br />
+<strong>Maps </strong>: Things with unique id ( Classes that implement Map Interface)<br />
+<strong>Queues </strong>: Things arranged in order ( Classes that implement QueueInterface)</p>
+
+<p>The blue ones are the Interfaces and the red ones are the implementation classes</p>
+
+<p><img src="../../img/Collection-Classes_Map.jpg" width="500" /></p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Below table shows the different concrete classes implementing these interfaces</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>Maps</td>
+			<td>Sets</td>
+			<td>Lists</td>
+			<td>Queues</td>
+			<td>Utilities</td>
+		</tr>
+		<tr>
+			<td>
+			<ul>
+				<li>HashMap</li>
+				<li>Hashtable</li>
+				<li>TreeMap</li>
+				<li>LinkedHashMap</li>
+			</ul>
+			</td>
+			<td>
+			<ul>
+				<li>HashSet</li>
+				<li>LinkedHashSet</li>
+				<li>TreeSet</li>
+			</ul>
+			</td>
+			<td>
+			<ul>
+				<li>ArrayList</li>
+				<li>Vector</li>
+				<li>LinkedList</li>
+			</ul>
+			</td>
+			<td>
+			<ul>
+				<li>PriorityQueue</li>
+			</ul>
+			</td>
+			<td>
+			<ul>
+				<li>Collections</li>
+				<li>Arrays</li>
+			</ul>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<p><strong>List</strong><br />
+List interface promises that the elements maintain the order in which they are added. That means it is a ordered Collection. List implementations do not sort the elements.</p>
+
+<p>Lets see each implementation of List<br />
+<strong>ArrayList</strong><br />
+Ordered</p>
+
+<ul>
+	<li>ArrayList works on the principle of creating a array and adding elements to it.</li>
+	<li>ArrayList class has a member variable elementData which is a Object array;</li>
+</ul>
+
+<p><em><strong>Object[] elementData;</strong></em><br />
+When we do List l = new ArrayList(); the array elementData is initialised with a size of 10</p>
+
+<p><em>add(E element)</em><br />
+When a new element is added the capacity of the array elementData is checked and if it is completely filled that is all element 10 are filled a new array is created with a new capacity by using Arrays.copyOf. If the elementData array is not exhausted the new element is added in the array.<br />
+So adding a element in a array may take more time as a completely new array needs to be created with greater capacity and the data in the old array is transferred into the new array.</p>
+
+<p><em>add(index i, E element)</em><br />
+On adding a element at a particular index in ArrayList, ArrayList checks if a element is already present at that index. If no than the element passed in add() is added at that index, otherwise a new array is created with the index kept vacant and the remaining element shifted to right.<br />
+For Eg:</p>
+
+<p>List<integer> l = new ArrayList<integer>();<br />
+l.add(1);<br />
+l.add(2);<br />
+l.add(1,3);<br />
+l.add(4);</integer></integer></p>
+
+<p>for(int i:l){<br />
+&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(i);<br />
+}</p>
+
+<p><br />
+&nbsp;Output<br />
+1<br />
+3<br />
+2<br />
+4</p>
+
+<p><br />
+Here above we are trying to add 3 and position 1, since position 1 already has value &#39;2&#39;. A new array is created with value at index 1 kept vacant and the remaining elements are shifted to right. Than the element 3 is added at index 1.</p>
+
+<p><em>get(int index)</em><br />
+The element present at that index in that array is returned. This is very fast.</p>
+
+<p>When to use ArrayList<br />
+When the requirement is fetch data frequently and adding data is one time activity.</p>
+
+<p>When not to use ArrayList<br />
+When the list is updated frequently</p>
+
+<p>To understand ArrayList in more detail follow link Custom Array List. Here a custom Arraylist is created with basic add and get operations</p>
+
+<p><strong>Basic Data Structure which is used in an ArrayList is -</strong><br />
+private transient Object[]elementData;</p>
+
+<p>So, going by declaration it&#39;s an array of Object.<br />
+When we actually create an arrayList following piece of code is executed -<br />
+&nbsp; this.elementData=new Object[initial capacity];</p>
+
+<p>ArrayList can be created in two ways-<br />
+1. List<string> myList=new ArrayList<string>();</string></string></p>
+
+<p>When we create an ArrayList in this way, default constructor is invoked and will internally create an array of Object with default size, which is 10.<br />
+2. List<string> myList=new ArrayList<string>(5);</string></string></p>
+
+<p>When we create an ArrayList in this way, constructor with an integer&nbsp; argument is invoked and will internally create an array of Object with the size, specified in the constructor argument, which happens to be 5 in this case.<br />
+Now, As we all know that unlike normal arrays, the size of the ArrayList grows dynamically. But how its size grows internally?</p>
+
+<p>Inside .add() method there is this check. So,before adding element into the array it will check what is the current size of filled elements and what is the maximum size of the array. If size of filled elements is greater than maximum size of the array then size of the array must be increased. But we know that the size of the array cannot be increased dynamically.</p>
+
+<p>So what happens internally is a new Array is created with size 1.5*currentSize and the data from old Array is copied into this new Array.</p>
+
+<p><br />
+<strong>Linked List</strong><br />
+Ordered<br />
+As opposed to ArrayList LinkedList does not store elements in a array. Linked List is a actually a collection ob objects linked together using a reference.<br />
+For more details about the Data structure of Singly Link List and Doubly Linked List refer this link Double Link List</p>
+
+<p>With the Node called as Entry class having structure as<br />
+&nbsp;class Entry {<br />
+&nbsp;E element;<br />
+&nbsp;Entry next;<br />
+&nbsp;Entry previous;<br />
+&nbsp;}</p>
+
+<p>&nbsp;LinkedList class also has a instance variable of type &#39;Entry&#39; called &#39;header&#39;. This is the &#39;start&#39; element or node of the list.</p>
+
+<p><em>add(E element )</em><br />
+&nbsp;Every Time we call add(var);&nbsp; a new instance of &#39;Entry&#39; class is created and attached at the end of the list.<br />
+&nbsp;<br />
+<em>add(var, position)</em><br />
+Inserts the specified element at the specified position in this list.<br />
+Shifts the element currently at that position (if any) and any subsequent elements to the right.<br />
+&nbsp;<br />
+<em>get(int index)</em><br />
+It iterates through the list and returns the element. This is very expensive and time consuming as opposed to ArraList.get(int index)</p>
+
+<p>When to use LinkedList<br />
+When the elements are getting added and removed frequently.<br />
+&nbsp;<br />
+When not to use LinkedList<br />
+When you want to access or fetch a element by index.</p>
+
+<p>&nbsp;</p>
+
+<p><strong>Map</strong><br />
+As we saw above, the List allows us to add values in it. But to find that value you need to traverse through the complete list. Map is a special collection provided by Java. It helps to find a added element easily.</p>
+
+<p>Instead of just adding the value or element in a collection, Map allows you to add to elements. One called as key and the other as value.</p>
+
+<p>Consider the key as employee id and the value as the employee object.</p>
+
+<p>Lets see different implementations of Map.</p>
+
+<p><strong>HashMap</strong><br />
+HashMap works on the principal of hashing. It stores values in the form of key,value pair and to access a value you need to provide the key.<br />
+For efficient use of HashMap the &#39;key&#39; element should implement equals() and hashcode() method. equals() method define that two objects are meaningfully equal. hashcode() helps HashMap to arrange elements separately in a bucket. So elements with same hascode are kept in the same bucket together.<br />
+So when we want to fetch a element using get(K key), HashMap first identifies the bucket in which all elements of the same hascode as the hashcode of the &#39;key&#39; passed are present. Than it uses the equals() method to identify the actual object present in the bucket.</p>
+
+<p>Lets see how HashMap implements this logic internally.</p>
+
+<p><img src="../../img/HashMap.JPG" width="500" /></p>
+
+<p>For fast access to a value HashMap places a element (both key and value) in a SinglyLinkedList(Bucket). All the elements that have the same hascode are placed in the same SinglyLinkedList. The number of SinglyLinkedList(buckets) depends upon how many objects are present with different hashcode. To hold these buckets together a array is used. The size of the array is initially defined to 12. And it changes as new elements with different hascodes are added. Lets see the pictorial view.<br />
+The structure of the &#39;Entry&#39; class used above.</p>
+
+<p>class Entry {<br />
+&nbsp;&nbsp; K key;<br />
+&nbsp;&nbsp; V value;<br />
+&nbsp;&nbsp; Entry next;<br />
+&nbsp;&nbsp; int hash;<br />
+}</p>
+
+<p>HashMap also has some more variables which define the initial size of the array.</p>
+
+<p>DEFAULT_LOAD_FACTOR = 0.75f;<br />
+DEFAULT_INITIAL_CAPACITY = 16;</p>
+
+<p>Entry[] table = new Entry[DEFAULT_INITIAL_CAPACITY];</p>
+
+<p>What is bucket ?<br />
+A bucket is used to store key value pairs . A bucket can have multiple key-value pairs . In hash map, bucket used simple linked list to store objects .</p>
+
+<p>Code inside Java Api (HashMap class internal implementation) for HashMap get(Obejct key) method</p>
+
+<p style="margin-left: 80px;">1.&nbsp; Public&nbsp; V get(Object key)<br />
+&nbsp;&nbsp; {<br />
+2.&nbsp;&nbsp;&nbsp;&nbsp; if (key ==null)<br />
+3.&nbsp;&nbsp;&nbsp;&nbsp; //Some code<br />
+&nbsp;&nbsp;&nbsp;<br />
+4.&nbsp;&nbsp;&nbsp;&nbsp; int hash = hash(key.hashCode());<br />
+&nbsp;&nbsp;&nbsp;<br />
+5.&nbsp;&nbsp;&nbsp;&nbsp; // if key found in hash table then&nbsp; return value<br />
+6.&nbsp;&nbsp;&nbsp;&nbsp; //&nbsp;&nbsp;&nbsp; else return null<br />
+&nbsp;&nbsp; }</p>
+
+<p><strong>Hash map works on the principle of hashing</strong></p>
+
+<p>HashMap get(Key k) method calls hashCode method on the key object and applies returned hashValue to its own static hash function to find a bucket location(backing array) where keys and values are stored in form of a nested class called Entry (Map.Entry) . So you have concluded that from the previous line that Both key and value is stored in the bucket as a form of&nbsp; Entry object . So thinking that Only value is stored&nbsp; in the bucket is not correct and will not give a good impression on the interviewer .</p>
+
+<p>* Whenever we call get( Key k )&nbsp; method on the HashMap object . First it checks that whether key is null or not .&nbsp; Note that there can only be one null key in HashMap .&nbsp;</p>
+
+<p><strong><em>If key is null , then Null keys always map to hash 0, thus index 0.</em></strong></p>
+
+<p>If key is not null then , it will call hashfunction on the key object , see line 4 in above method i.e. key.hashCode()&nbsp; ,so after key.hashCode() returns hashValue , line 4 looks like</p>
+
+<p>&nbsp;int hash = hash(hashValue)</p>
+
+<p>&nbsp;, and now ,it applies returned hashValue into its own hashing function .</p>
+
+<p>We might wonder why we are calculating the hashvalue again using hash(hashValue). Answer is ,It defends against poor quality hash functions.</p>
+
+<p>Now step 4 final&nbsp; hashvalue is used to find the bucket location at which the Entry object is stored . Entry object stores in the bucket like this (hash,key,value,bucketindex) .&nbsp;</p>
+
+<p>Interviewer:&nbsp;&nbsp;&nbsp; What if&nbsp; when two different keys have the same hashcode ?</p>
+
+<p>Solution, equals() method comes to rescue.Here candidate gets puzzled. Since bucket is one and we have two objects with the same hashcode .Candidate usually forgets that bucket is a simple linked list.</p>
+
+<p>The bucket is the linked list effectively . Its not a LinkedList as in a java.util.LinkedList - It&#39;s a separate (simpler) implementation just for the map .</p>
+
+<p>So we traverse through linked list , comparing keys in each entries using keys.equals() until it return true.&nbsp; Then the corresponding entry object Value is returned .</p>
+
+<p><img src="../../img/howHashmapWorksInternallyInJava.png" /></p>
+
+<p>One of&nbsp; our readers Jammy&nbsp; asked a very good&nbsp; question</p>
+
+<p>When the functions &#39;equals&#39; traverses through the linked list does it traverses from start to end one by one...in other words brute method. Or the linked list is sorted based on key and then it traverses?</p>
+
+<p>Answer is when an element is added/retrieved, same procedure follows:</p>
+
+<p>&nbsp;<br />
+a. Using key.hashCode() [ see above step 4],determine initial hashvalue for the key</p>
+
+<p>b. Pass intial hashvalue as hashValue&nbsp; in&nbsp;&nbsp;&nbsp; hash(hashValue) function, to calculate the final hashvalue.</p>
+
+<p>c. Final hash value is then passed as a first parameter in the indexFor(int ,int )method .<br />
+&nbsp;&nbsp;&nbsp; The second parameter is length which is a constant in HashMap Java Api , represented by&nbsp; DEFAULT_INITIAL_CAPACITY</p>
+
+<p>&nbsp;&nbsp;&nbsp; The default&nbsp; value of DEFAULT_INITIAL_CAPACITY is 16 in HashMap Java Api .</p>
+
+<p>&nbsp;indexFor(int,int) method&nbsp; returns the first entry in the appropriate bucket. The linked list in the bucket is then iterated over - (the end is found and the element is added or the key is matched and the value is returned )</p>
+
+<p style="margin-left: 80px;"><br />
+Explanation about indexFor(int,int) is below :</p>
+
+<p style="margin-left: 80px;">/**<br />
+* Returns index for hash code h.<br />
+*/<br />
+static int indexFor(int h, int length) {<br />
+&nbsp;&nbsp;&nbsp; return h &amp; (length-1);<br />
+}</p>
+
+<p><br />
+The above function indexFor() works because Java HashMaps always have a capacity, i.e. number of buckets, as a power of 2.<br />
+&nbsp;Let&#39;s work with a capacity of 256,which is 0x100, but it could work with any power of 2. Subtracting 1<br />
+from a power of 2 yields the exact bit mask needed to bitwise-and with the hash to get the proper bucket index, of range 0 to length - 1.<br />
+256 - 1 = 255<br />
+0x100 - 0x1 = 0xFF<br />
+E.g. a hash of 257 (0x101) gets bitwise-anded with 0xFF to yield a bucket number of 1.</p>
+
+<p><strong>TreeMap</strong><br />
+Sorted<br />
+TreeMap is a structure which is designed to work as a Red - Black - Tree. Here each node has only two child nodes and the insertion is a tree happens same as the insertion strategy of Binary Search Tree explained here. So the elements in a TreeMap are always sorted.<br />
+The elements added is a TreeMap should implement comparable and provide implementation of compareTo method. On the basis of this TreeMap decides wether the node is smaller or greater than other node. If Comparable is not implemented, a class which is Comparator should be passed in the constructor of TreeMap. If both Comparable and Comparator are present TreeMap uses Comparator implementation.</p>
+
+<p>In addition to the requirements imposed on a binary search tree the following must be satisfied by a red&ndash;black tree:[6]</p>
+
+<ol>
+	<li>A node is either red or black.</li>
+	<li>The root is black. (This rule is sometimes omitted. Since the root can always be changed from red to black, but not necessarily vice versa, this rule has little effect on analysis.)</li>
+	<li>All leaves (NIL) are black. (All leaves are same color as the root.)</li>
+	<li>Every red node must have two black child nodes (and therefore it must have a black parent).</li>
+	<li>Every path from a given node to any of its descendant NIL nodes contains the same number of black nodes.</li>
+</ol>
+
+<p>TreeMap internally maintains a List of Nodes with each node being a Entry<k,v> class which is actually a implementation of Map.Entry<k,v> interface.<br />
+The basic structure of this Entry class is</k,v></k,v></p>
+
+<p>class Entry{<br />
+&nbsp;K key;<br />
+&nbsp;V value;<br />
+&nbsp;Entry left = null;<br />
+&nbsp;Entry right = null;<br />
+&nbsp;Entry parent;<br />
+&nbsp;boolean color = BLACK;<br />
+}</p>
+
+<p><br />
+Entry<k,v> of TreeMap has internally three entries of Entry<k,v> class : left,right,parent;<br />
+When we use put(K,V) method it checks if root is pointing anywhere if no it makes the instance of Entry<k,v> and point to root;<br />
+The constructor of Entry<k,v> takes key, value and parent. In this case parent is null;<br />
+For the next time we enter something using put(K,V) it first identifies the comparison mechanism to use. First it check the Comparator class is present or not . This class is passed when creating the instance of TreeMap. If not present it uses the Key&#39;s Comparable implementation.<br />
+It then traverse through root and compares each node with the node entered and depending upon the comparison places the node either left or right of the parent node.</k,v></k,v></k,v></k,v></p>
+
+<p><strong>Set</strong><br />
+Set is a collection that can not contain duplicate values. So if we want to have a unique collection, Set is the obvious choice.</p>
+
+<p>Set has three implementations HashSet, TreeSet and LinkedHashedSet.</p>
+
+<p><br />
+<strong>Hashset</strong><br />
+Non Duplicate<br />
+Un-Ordered<br />
+Hashset is a special case<br />
+HashSet internally uses HashMap. Yes thats true.<br />
+HashSet has a instance variable called &#39;map&#39; which is a instance of HashMap.</p>
+
+<p>add(E element)<br />
+When we add a value in Hashset, Hashset internally adds a value in &#39;map&#39; by calling put(E,o);<br />
+where E that is the key is the element passed in add(E element) of HashSet and &#39;o&#39; as the value which is a dummy Object creted by doing Object o = new Object; which is common for all key&#39;s entered in HashMap &#39;map&#39;.<br />
+HashSet internally checks wether the Key that is &#39;element&#39; is already present by calling the equals method of &#39;element&#39;.<br />
+This method returns false if the Key is already present in HashMap.</p>
+
+<p><strong>How HashSet Works Internally In Java?</strong></p>
+
+<p>Whenever you insert an element into HashSet using add() method, it actually creates an entry in the internally backing HashMap object with element you have specified as it&rsquo;s key and constant called &ldquo;PRESENT&rdquo; as it&rsquo;s value. This &ldquo;PRESENT&rdquo; is defined in the HashSet class as below.</p>
+
+<p style="margin-left: 40px;">// Dummy value to associate with an Object in the backing Map<br />
+private static final Object PRESENT = new Object();</p>
+
+<p>Let&rsquo;s have a look at add() method of HashSet class.</p>
+
+<p style="margin-left: 40px;">public boolean add(E e)<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return map.put(e, PRESENT)==null;<br />
+}</p>
+
+<p>You can notice that, add() method of HashSet class internally calls put() method of backing HashMap object by passing the element you have specified as a key and constant &ldquo;PRESENT&rdquo; as it&rsquo;s value.</p>
+
+<p>remove() method also works in the same manner.</p>
+
+<p style="margin-left: 40px;">public boolean remove(Object o)<br />
+{<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return map.remove(o)==PRESENT;<br />
+}</p>
+
+<p>Let&rsquo;s see one example of HashSet and how it maintains HashMap internally.</p>
+
+<p style="margin-left: 40px;">public class HashSetExample<br />
+{<br />
+&nbsp;&nbsp;&nbsp; public static void main(String[] args)<br />
+&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Creating One HashSet object<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HashSet&lt;String&gt; set = new HashSet&lt;String&gt;();<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Adding elements to HashSet<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set.add(&quot;RED&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set.add(&quot;GREEN&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set.add(&quot;BLUE&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set.add(&quot;PINK&quot;);<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Removing &quot;RED&quot; from HashSet<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set.remove(&quot;RED&quot;);<br />
+&nbsp;&nbsp;&nbsp; }<br />
+}</p>
+
+<p>See the below picture how above program works internally. You can observe that internal HashMap object contains elements of HashSet as keys and constant &ldquo;PRESENT&rdquo; as their value.</p>
+
+<p><img src="../../img/HowHashSetWorks.png" /></p>
+
+<p>&nbsp;</p>
+
+<p><strong>TreeSet</strong><br />
+Non Duplicate<br />
+Sorted<br />
+Like HashSet uses HashMap internally, TreeSet uses TreeMap internally. TreeSet ensures that elements added are not duplicate and they are sorted. Sorting is done using TreeMap.</p>
+
+<p>add(E element)<br />
+When we add a value in TreeSet, TreeSet internally adds a value in &#39;map&#39; by calling put(E,o);<br />
+where E that is the key is the element passed in add(E element) of TreeSetand &#39;o&#39; as the value which is a dummy Object creted by doing Object o = new Object; which is common for all key&#39;s entered in TreeMap &#39;map&#39;.<br />
+TreeSet internally checks wether the Key that is &#39;element&#39; is already present by calling the equals method of &#39;element&#39;.<br />
+This method returns false if the Key is already present in TreeMap.</p>
+
+<p><strong>LinkedHashSet</strong><br />
+Non Duplicate<br />
+Ordered<br />
+LinkedHashSet extends HashSet that means it is a HashMap without duplicates. But the difference here with HashSet is that LinkedHashSet is ordered.</p>
+
+<p>It uses a Doubly Linked List that runs through the Set holding the order together.</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+</body>
+</html>

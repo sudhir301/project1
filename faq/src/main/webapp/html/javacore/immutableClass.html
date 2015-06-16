@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1" />
+	<title>Immutable Class</title>
+    <style type="text/css"><!--
+    body{
+        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
+        font-size : 20px;
+        width : 1080px;
+    }
+-->
+	</style>	
+</head>
+<body>
+<h2 style="text-align: center;">Immutable Class</h2>
+
+<p><strong>What is immutable class in Java</strong></p>
+
+<ul>
+	<li>Immutable classes are those class, whose object can not be modified once created, it means any modification on immutable object will result in another immutable object.</li>
+	<li>best example to understand immutable and mutable objects are, String and StringBuffer.</li>
+	<li>Since String is immutable class, any change on existing string object will result in another string e.g. replacing a character into String, creating substring from String, all result in a new objects.</li>
+	<li>While in case of mutable object like StringBuffer, any modification is done on object itself and no new objects are created.</li>
+	<li>Some times this immutability of String can also cause security hole, and that the reason why password should be stored on char array instead of String.</li>
+</ul>
+
+<p><br />
+<strong>How to write immutable class in Java</strong></p>
+
+<p>Despite of few disadvantages,</p>
+
+<p>Immutable object still offers several benefits in multi-threaded programming and it&rsquo;s a great choice to achieve thread safety in Java code. here are few rules, which helps to make a class immutable in Java :</p>
+
+<ol>
+	<li>State of immutable object can not be modified after construction, any modification should result in new immutable object.
+	<ol>
+		<li>remove setter methods from teh object.</li>
+	</ol>
+	</li>
+	<li>All fields of Immutable class should be final.</li>
+	<li>Object must be properly constructed i.e. object reference must not leak during construction process.</li>
+	<li>Object should be final in order to restrict sub-class for altering immutability of parent class.</li>
+</ol>
+
+<ul>
+	<li>By the way, you can still create immutable object by violating few rules, like String has its hashcode in non final field, but its always guaranteed to be same.</li>
+	<li>No matter how many times you calculate it, because it&rsquo;s calculated from final fields, which is guaranteed to be same. This required a deep knowledge of Java memory model, and can create subtle race conditions if not addressed properly.</li>
+	<li>In next section we will see simple example of writing immutable class in Java. By the way, if your Immutable class has lots of optional and mandatory fields, then you can also use Builder design pattern to make a class Immutable in Java.</li>
+</ul>
+
+<p><strong>Immutable Class Example in Java</strong></p>
+
+<p>Here is complete code example of writing immutable class in Java. We have followed simplest approach and all rules for making a class immutable, including it making class final to avoid putting immutability at risk due to Inheritance and Polymorphism.</p>
+
+<p style="margin-left: 160px;">public <strong>final </strong>class Contacts {</p>
+
+<p style="margin-left: 160px;">&nbsp;&nbsp;&nbsp; private <strong>final </strong>String name;<br />
+&nbsp;&nbsp;&nbsp; private <strong>final </strong>String mobile;</p>
+
+<p style="margin-left: 160px;">&nbsp;&nbsp;&nbsp; public Contacts(String name, String mobile) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.name = name;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.mobile = mobile;<br />
+&nbsp;&nbsp;&nbsp; }</p>
+
+<p style="margin-left: 160px;">&nbsp;<strong>&nbsp;&nbsp; // No setter methods </strong><br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; public String getName(){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return name;<br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; public String getMobile(){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return mobile;<br />
+&nbsp;&nbsp;&nbsp; }<br />
+}</p>
+
+<p>This Java class is immutable, because its state can not be changed once created. You can see that all of it&rsquo;s fields are final. This is one of the most simple way of creating immutable class in Java, where all fields of class also remains immutable like String in above case.</p>
+
+<p>Some time you may need to write immutable class which includes mutable classes like java.util.Date, despite<strong> storing Date into final field it can be modified internally, if internal date is returned to the client</strong>. In order to preserve immutability in such cases, its advised to return copy of original object, which is also one of the Java best practice. here is another example of making a class immutable in Java, which includes mutable member variable.</p>
+
+<p style="margin-left: 120px;">public final class ImmutableReminder{<br />
+&nbsp;&nbsp;&nbsp; private final Date remindingDate;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; public ImmutableReminder (Date remindingDate) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(remindingDate.getTime() &lt; System.currentTimeMillis()){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; throw new IllegalArgumentException(&quot;Can not set reminder&rdquo; +<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &ldquo; for past time: &quot; + remindingDate);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.remindingDate = new Date(remindingDate.getTime());<br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; public Date getRemindingDate() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>return (Date) remindingDate.clone();</strong><br />
+&nbsp;&nbsp;&nbsp; }<br />
+}</p>
+
+<p>In above example of creating immutable class, Date is a mutable object. If getRemindingDate() returns actual Date object than despite remindingDate being final variable, internals of Date can be modified by client code. By returning clone() or copy of remindingDate, we avoid that danger and preserves immutability of class.</p>
+
+<p><strong>Benefits of Immutable Classes in Java</strong></p>
+
+<p>As I said earlier Immutable classes offers several benefits, here are few to mention:</p>
+
+<ol>
+	<li>Immutable objects are by <strong>default thread safe</strong>, can be shared without synchronization in concurrent environment.</li>
+	<li>Immutable object simplifies development, because its easier to <strong>share between multiple threads </strong>without external synchronization.</li>
+	<li>Immutable object <strong>boost performance </strong>of Java application <strong>by reducing synchronization </strong>in code.</li>
+	<li>Another important benefit of Immutable objects is <strong>reusability</strong>, you can <strong>cache Immutable object and reuse them</strong>, much like String literals and Integers.&nbsp;</li>
+	<li>You can use static factory methods to provide methods like valueOf(), which can return an existing Immutable object from cache, instead of creating a new one.</li>
+</ol>
+
+<p>Apart from above advantages, immutable object has disadvantage of creating garbage as well. Since immutable object can not be reused and they are just a use and throw. String being a prime example, which can create lot of garbage and can potentially slow down application due to heavy garbage collection, but again that&#39;s extreme case and if used properly Immutable object adds lot of value.</p>
+
+<p>That&#39;s all on how to write immutable class in Java. we have seen rules of writing immutable classes, benefits offered by immutable objects and how we can create immutable class in Java which involves mutable fields. Don&rsquo;t forget to read more about concurrency benefit offered by Immutable object in one of the best Java book recommended to Java programmers, Concurrency Practice in Java.</p>
+
+<p><br />
+Read more: http://javarevisited.blogspot.com/2013/03/how-to-create-immutable-class-object-java-example-tutorial.html</p>
+</body>
+</html>

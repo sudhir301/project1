@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1" />
+	<title>Cyclic Barrier</title>
+    <style type="text/css"><!--
+    body{
+        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
+        font-size : 20px;
+        width : 1080px;
+    }
+-->
+	</style>
+</head>
+<body>
+<p><strong>What is CyclicBarrier in Java</strong><br />
+CyclicBarrier in Java is a synchronizer introduced in JDK 5 on java.util.Concurrent package along with other concurrent utility like Counting Semaphore, BlockingQueue, ConcurrentHashMap etc. CyclicBarrier is similar to CountDownLatch which we have seen in last article&nbsp; What is CountDownLatch in Java and allows multiple threads to wait for each other (barrier) before proceeding. Difference between CountDownLatch and CyclicBarrier is a also very popular multi-threading interview question in Java. CyclicBarrier is a natural requirement for concurrent program because it can be used to perform final part of task once individual tasks&nbsp; are completed. All threads which wait for each other to reach barrier are called parties, CyclicBarrier is initialized with number of parties to be wait and threads wait for each other by calling CyclicBarrier.await() method which is a blocking method in Java and&nbsp; blocks until all Thread or parties call await(). In general calling await() is shout out that Thread is waiting on barrier. await() is a blocking call but can be timed out or Interrupted by other thread. In this Java concurrency tutorial we will see What is CyclicBarrier in Java&nbsp; and&nbsp; an example of CyclicBarrier on which three Threads will wait for each other before proceeding further.</p>
+
+<p><strong>Difference between CountDownLatch and CyclicBarrier in Java</strong><br />
+In our last article we have see how CountDownLatch can be used to implement multiple threads waiting for each other. If you look at CyclicBarrier it also the does the same thing but there is a different you can not reuse CountDownLatch once count reaches zero while you can reuse CyclicBarrier by calling reset() method which resets Barrier to its initial State. What it implies that CountDownLatch is good for one time event like application start-up time and CyclicBarrier can be used to in case of recurrent event e.g. concurrently calculating solution of big problem etc. If you like to learn more about threading and concurrency in Java you can also check my post on When to use Volatile variable in Java&nbsp; and How Synchronization works in Java.</p>
+
+<p><strong>CyclicBarrier in Java &ndash; Example</strong></p>
+
+<p>We know what is CyclicBarrier in Java and it&#39;s time to see example of CyclicBarrier in Java. Here is a simple example of CyclicBarrier in Java on which we initialize CyclicBarrier with 3 parties, means in order to cross barrier, 3 thread needs to call await() method. each thread calls await method in short duration but they don&#39;t proceed until all 3 threads reached barrier, once all thread reach barrier, barrier gets broker and each thread started there execution from that point. Its much clear with the output of following example of CyclicBarrier in Java:</p>
+
+<p style="margin-left: 80px;">import java.util.concurrent.BrokenBarrierException;<br />
+import java.util.concurrent.CyclicBarrier;<br />
+import java.util.logging.Level;<br />
+import java.util.logging.Logger;</p>
+
+<p style="margin-left: 80px;">/**<br />
+&nbsp;* Java program to demonstrate how to use CyclicBarrier in Java. CyclicBarrier is a<br />
+&nbsp;* new Concurrency Utility added in Java 5 Concurrent package.<br />
+&nbsp;*<br />
+&nbsp;* @author Javin Paul<br />
+&nbsp;*/<br />
+public class CyclicBarrierExample {</p>
+
+<p style="margin-left: 80px;">&nbsp;&nbsp;&nbsp; //Runnable task for each thread<br />
+&nbsp;&nbsp;&nbsp; private static class Task implements Runnable {</p>
+
+<p style="margin-left: 80px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; private CyclicBarrier barrier;</p>
+
+<p style="margin-left: 80px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public Task(CyclicBarrier barrier) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; this.barrier = barrier;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</p>
+
+<p style="margin-left: 80px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Override<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public void run() {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(Thread.currentThread().getName() + &quot; is waiting on barrier&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; barrier.await();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(Thread.currentThread().getName() + &quot; has crossed the barrier&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } catch (InterruptedException ex) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Logger.getLogger(CyclicBarrierExample.class.getName()).log(Level.SEVERE, null, ex);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } catch (BrokenBarrierException ex) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Logger.getLogger(CyclicBarrierExample.class.getName()).log(Level.SEVERE, null, ex);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; }</p>
+
+<p style="margin-left: 80px;">&nbsp;&nbsp;&nbsp; public static void main(String args[]) {</p>
+
+<p style="margin-left: 80px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //creating CyclicBarrier with 3 parties i.e. 3 Threads needs to call await()<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; final CyclicBarrier cb = new CyclicBarrier(3, new Runnable(){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @Override<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; public void run(){<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //This task will be executed once all thread reaches barrier<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;All parties are arrived at barrier, lets play&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; });</p>
+
+<p style="margin-left: 80px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //starting each of thread<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Thread t1 = new Thread(new Task(cb), &quot;Thread 1&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Thread t2 = new Thread(new Task(cb), &quot;Thread 2&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Thread t3 = new Thread(new Task(cb), &quot;Thread 3&quot;);</p>
+
+<p style="margin-left: 80px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t1.start();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t2.start();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t3.start();<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp; }<br />
+}</p>
+
+<p style="margin-left: 80px;">Output:<br />
+Thread 1 is waiting on barrier<br />
+Thread 3 is waiting on barrier<br />
+Thread 2 is waiting on barrier<br />
+All parties are arrived at barrier, lets play<br />
+Thread 3 has crossed the barrier<br />
+Thread 1 has crossed the barrier<br />
+Thread 2 has crossed the barrier</p>
+
+<p><br />
+<strong>When to use CyclicBarrier in Java</strong><br />
+Given the nature of CyclicBarrier it can be very handy to implement map reduce kind of task similar to fork-join framework of Java 7, where a big task is broker down into smaller pieces and to complete the task you need output from individual small task e.g. to count population of India you can have 4 threads which counts population from North, South, East and West and once complete they can wait for each other, When last thread completed there task, Main thread or any other thread can add result from each zone and print total population. You can use CyclicBarrier in Java :</p>
+
+<p>1) To implement multi player game which can not begin until all player has joined.<br />
+2) Perform lengthy calculation by breaking it into smaller individual tasks, In general to implement Map reduce technique.</p>
+
+<p><strong>Important point of CyclicBarrier in Java</strong><br />
+1. CyclicBarrier can perform a completion task once all thread reaches to barrier, This can be provided while creating CyclicBarrier.</p>
+
+<p>2. If CyclicBarrier is initialized with 3 parties means 3 thread needs to call await method to break the barrier.<br />
+3. Thread will block on await() until all parties reaches to barrier, another thread interrupt or await timed out.<br />
+4. If another thread interrupt the thread which is waiting on barrier it will throw BrokernBarrierException as shown below:</p>
+
+<p>java.util.concurrent.BrokenBarrierException<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at java.util.concurrent.CyclicBarrier.dowait(CyclicBarrier.java:172)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; at java.util.concurrent.CyclicBarrier.await(CyclicBarrier.java:327)</p>
+
+<p>5.CyclicBarrier.reset() put Barrier on its initial state, other thread which is waiting or not yet reached barrier will terminate with java.util.concurrent.BrokenBarrierException.</p>
+
+<p>That&#39;s all on&nbsp; What is CyclicBarrier in Java , When to use CyclicBarrier in Java and a Simple Example of How to use CyclicBarrier in Java . We have also seen difference between CountDownLatch and CyclicBarrier in Java and got some idea where we can use CyclicBarrier in Java Concurrent code.</p>
+
+<p><br />
+Read more: http://javarevisited.blogspot.com/2012/07/cyclicbarrier-example-java-5-concurrency-tutorial.html#ixzz3ca1ix2tL</p>
+</body>
+</html>

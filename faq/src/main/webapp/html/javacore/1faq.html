@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>FAQ 1</title>
+    <style type="text/css"><!--
+    body{
+        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
+        font-size : 20px;
+        width : 1080px;
+    }
+-->
+	</style>
+  </head>
+  <body>
+    <h2 style="text-align: center;">JAVA CORE</h2>
+    <h2>String &amp; Immutable Class</h2>
+    <p><strong>What is Immutable Object? Can you write Immutable Class?</strong></p>
+    <ul>
+      <li>Immutable classes are Java classes whose objects can not be modified
+        once created.</li>
+      <li>Any modification in Immutable object result in new object. For example
+        String is immutable in Java.</li>
+      <li>Mostly Immutable classes are also <strong>final in Java</strong>, in
+        order<u> </u><strong>to prevent sub classes from overriding methods</strong>,
+        which can compromise Immutability.</li>
+      <li>You can achieve same functionality by making member as non final but
+        private and not modifying them except in constructor.</li>
+      <li>Apart form obvious, you also need to make sure that, you should not
+        expose internals of Immutable object, especially if it contains a
+        mutable member. Similarly, when you accept value for mutable member from
+        client e.g. java.util.Date, use clone() method keep separate copy for
+        yourself, to prevent risk of malicious client modifying mutable
+        reference after setting it. Same precaution needs to be taken while
+        returning value for a mutable member, return another separate copy to
+        client, never return original reference held by Immutable class. You can
+        see my post <a href="immutableClass.html">How to create Immutable class
+          in Java for step by step guide and code examples.</a></li>
+    </ul>
+    <p><strong>Does all property of Immutable Object needs to be final?</strong></p>
+    <p>Not necessary, as stated above you can achieve same functionality <strong>by
+        making member as non final but private and not modifying them except in
+        constructor</strong>. <strong>Don't provide setter method </strong>for
+      them and if it is a<strong> mutable object, then don't ever leak any
+        reference </strong>for that member. Remember making a reference
+      variable final, only ensures that it will not be reassigned a different
+      value, but you can still change individual properties of object, pointed
+      by that reference variable. This is one of the key point, Interviewer like
+      to hear from candidates. See my post on Java final variables, to learn
+      more about them.</p>
+    <p><strong>What is the difference between creating String as new() and
+        literal?</strong></p>
+    <p>When we create string with <strong>new() Operator</strong>, it?s <strong>created
+        in heap </strong>and not added into string pool while <strong>String
+        created using literal </strong>are created in <strong>String pool
+        itself which exists in PermGen </strong>area of heap.<br>
+      String str = new String("Test")</p>
+    <p>does not put the object str in String pool , we need to call
+      String.intern() method which is used to put them into String pool
+      explicitly. its only when you create String object as String literal e.g.
+      String s = "Test" Java automatically put that into String pool. By the way
+      there is a catch here, Since we are passing arguments as "Test", which is
+      a String literal, it will also create another object as "Test" on string
+      pool. This is the one point, which has gone unnoticed, until knowledgeable
+      readers of Javarevisited blog suggested it.&nbsp; <a href="stringLiteral.html">
+        To learn more about difference between String literal and String object.</a></p>
+    <p><strong>How does substring () inside String works?</strong></p>
+    <p>Substring creates new object out of source string by taking a portion of
+      original string?. This question was mainly asked to see if developer is
+      familiar with risk of memory leak, which sub-string can create. Until Java
+      1.7, substring holds reference of original character array, which means
+      even a substring of 5 character long, can prevent 1GB character array from
+      garbage collection, by holding a strong reference. This issue is fixed in
+      Java 1.7, where original character array is not referenced any more, but
+      that change also made creation of substring bit costly in terms of time.
+      Earlier it was on the range of O(1), which could be O(n) in worst case on
+      Java 7. See my post How SubString works in Java for detailed answer of
+      this Java question.</p>
+    <p style="margin-left: 40px;"><strong>how do you deal with this problem</strong>?
+      Though you can not go, and change Java substring method, you can still
+      make some work around, in case you are creating substring of significant
+      longer String. Simple solution is to<strong> trim the string, and keep
+        size of character array according to length of substring.</strong>
+      Luckily java.lang.String has constructor to do this, as shown in below
+      example.</p>
+    <p style="margin-left: 40px;">// comma separated stock symbols from NYSE<br>
+      String listOfStockSymbolsOnNYSE = getStockSymbolsForNYSE();</p>
+    <p style="margin-left: 40px;">//calling String(string) constructor<br>
+      String apple = new String(<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      listOfStockSymbolsOnNYSE.substring(appleStartIndex, appleEndIndex)<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      );</p>
+    <p style="margin-left: 40px;">If you look code on java.lang.String class,
+      you will see that this constructor trim the array, if it?s bigger than
+      String itself.</p>
+    <p style="margin-left: 40px;">public String(String original) {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ...</p>
+    <p style="margin-left: 40px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if
+      (originalValue.length &gt; size) {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // The
+      array representing the String is bigger than the new<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //
+      String itself.&nbsp; Perhaps this constructor is being called<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // in
+      order to trim the baggage, so make a copy of the array.<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int off
+      = original.offset;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; v =
+      Arrays.copyOfRange(originalValue, off, off+size);</p>
+    <p style="margin-left: 40px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+      else {</p>
+    <p style="margin-left: 40px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      // The array representing the String is the same<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // size
+      as the String, so no point in making a copy.<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; v =
+      originalValue;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+      &nbsp;&nbsp;&nbsp; ...<br>
+      &nbsp;}<br>
+      Another way to solve this problem is to call intern() method on substring,
+      which will than fetch an existing string from pool or add it if necessary.
+      Since the String in the pool is a real string it only take space as much
+      it requires. It?s also worth noting that sub-strings are not internalized,
+      when you call intern() method on original String. Most developer
+      successfully answers first three questions, which is related to usage of
+      substring, but they get stuck on last two, How substring creates memory
+      leak or How substring works. It's not completely there fault, because what
+      you know is that every time substring() returns new String which is not
+      exactly true, since it?s backed by same character array.</p>
+    <p style="margin-left: 40px;">Read more: <a href="http://javarevisited.blogspot.com/2011/10/how-substring-in-java-works.html#ixzz3cV2eOq5V">http://javarevisited.blogspot.com/2011/10/how-substring-in-java-works.html#ixzz3cV2eOq5V</a></p>
+    <p><strong>Which two method you need to implement to use an Object as key in
+        HashMap?</strong></p>
+    <p>In order to use any object as Key in HashMap or Hashtable, it must<strong>
+        implements equals and ha</strong>shcode method in Java. Read How HashMap
+      works in Java for detailed explanation on how equals and hashcode method
+      is used to put and get object from HashMap. You can also see my post <a href="equalsAndHashCode.html">
+        5 tips to correctly override equals in Java</a> to learn more about
+      equals.</p>
+    <p><strong>Where does equals and hashcode method comes in picture during get
+        operation?</strong></p>
+    <p>This core Java interview question is follow-up of previous Java question
+      and candidate should know that once you mention hashCode, people are most
+      likely ask, how they are used in HashMap. When you provide key object,
+      first it's hashcode method is called to calculate bucket location. Since a
+      bucket may contain more than one entry as linked list, each of those
+      Map.Entry object are evaluated by using equals() method to see if they
+      contain the actual key object or not. See How get method of HashMap works
+      in Java for detailed explanation.</p>
+    <p><br>
+      <strong>What is difference between Executor.submit() and
+        Executer.execute() method ?</strong></p>
+    <p>former returns an object of Future which can be used to find result from
+      worker thread</p>
+    <p>By the way @vinit Saini suggested a very good point related to this core
+      Java interview question<br>
+      There is a difference when looking at exception handling. If your tasks
+      throws an exception and if it was submitted with execute this exception
+      will go to the uncaught exception handler (when you don't have provided
+      one explicitly, the default one will just print the stack trace to
+      System.err). If you submitted the task with submit any thrown exception,
+      checked exception or not, is then part of the task's return status. For a
+      task that was submitted with submit and that terminates with an exception,
+      the Future.get() will re-throw this exception, wrapped in an
+      ExecutionException.</p>
+    <p><strong>What is the difference between factory and abstract factory
+        pattern?</strong></p>
+    <p>Abstract Factory provides one more level of abstraction. Consider
+      different factories each extended from an Abstract Factory and responsible
+      for creation of different hierarchies of objects based on the type of
+      factory. E.g. AbstractFactory extended by AutomobileFactory, UserFactory,
+      RoleFactory etc. Each individual factory would be responsible for creation
+      of objects in that genre.&nbsp; See here for detailed answer of this
+      question.</p>
+    <p><strong>What is Singleton? is it better to make whole method synchronized
+        or only critical section synchronized ?</strong></p>
+    <p>Singleton in Java is a class with just one instance in whole Java
+      application, for example java.lang.Runtime is a Singleton class. Creating
+      Singleton was tricky prior Java 4 but once Java 5 introduced Enum its very
+      easy. see my article How to create thread-safe Singleton in Java for more
+      details on writing Singleton using enum and double checked locking which
+      is purpose of this Java interview question.</p>
+    <p><strong>Can you write critical section code for singleton?</strong><br>
+      This core Java question is followup of previous question and expecting
+      candidate to write Java singleton using double checked locking. Remember
+      to use volatile variable to make Singleton thread-safe. check 10 Interview
+      questions on Singleton Pattern in Java for more details and questions
+      answers</p>
+    <p><strong>What is Singleton class? Have you used Singleton before?</strong></p>
+    <p>Singleton is a class which has only one instance in whole application and
+      provides a getInstance() method to access the singleton instance. There
+      are many classes in JDK which is implemented using Singleton pattern like
+      java.lang.Runtime which provides getRuntime() method to get access of it
+      and used to get free memory and total memory in Java.</p>
+    <p><strong>Which classes are candidates of Singleton? Which kind of class do
+        you make Singleton in Java?</strong></p>
+    <p>Here they check whether candidate has enough experience on usage of
+      singleton or not. Does he is familiar of advantage/disadvantage or
+      alternatives available for singleton in Java or not.</p>
+    <p>Answer : Any class which you want to be available to whole application
+      and whole only one instance is viable is candidate of becoming Singleton.
+      One example of this is Runtime class , since on whole java application
+      only one runtime environment can be possible making Runtime Singleton is
+      right decision. Another example is a utility classes like Popup in GUI
+      application, if you want to show popup with message you can have one PopUp
+      class on whole GUI application and anytime just get its instance, and call
+      show() with message.</p>
+    <p><strong>Can you write code for getInstance() method of a Singleton class
+        in Java?</strong></p>
+    <p>Most of the java programmer fail here if they have mugged up the
+      singleton code because you can ask lots of follow-up question based upon
+      the code they have written. I have seen many programmer write Singleton
+      getInstance() method with double checked locking but they are not really
+      familiar with the caveat associated with double checking of singleton
+      prior to Java 5.</p>
+    <p>Answer : Until asked don?t write code using double checked locking as it
+      is more complex and chances of errors are more but if you have deep
+      knowledge of double checked locking, volatile variable and lazy loading
+      than this is your chance to shine. I have shared code examples of writing
+      singleton classes using enum, using static factory and with double checked
+      locking in my recent post Why Enum Singletons are better in Java, please
+      see there.</p>
+    <p><strong>Is it better to make whole getInstance() method synchronized or
+        just critical section is enough? Which one you will prefer?</strong></p>
+    <p>This is really nice question and I mostly asked to just quickly check
+      whether candidate is aware of performance trade off of unnecessary locking
+      or not. Since locking only make sense when we need to create instance and
+      rest of the time its just read only access so locking of critical section
+      is always better option. read more about synchronization on How
+      Synchronization works in Java<br>
+      Answer : This is again related to double checked locking pattern, well
+      synchronization is costly and when you apply this on whole method than
+      call to getInstance() will be synchronized and contented. Since
+      synchronization is only needed during initialization on singleton
+      instance, to prevent creating another instance of Singleton, It?s better
+      to only synchronize critical section and not whole method. Singleton
+      pattern is also closely related to factory design pattern where
+      getInstance() serves as static factory method.</p>
+    <p><strong>What is lazy and early loading of Singleton and how will you
+        implement it?</strong></p>
+    <p>This is another great Singleton interview question in terms of
+      understanding of concept of loading and cost associated with class loading
+      in Java. Many of which I have interviewed not really familiar with this
+      but its good to know concept.</p>
+    <p>Answer : As there are many ways to implement Singleton like using double
+      checked locking or Singleton class with static final instance initialized
+      during class loading. Former is called lazy loading because Singleton
+      instance is created only when client calls getInstance() method while
+      later is called early loading because Singleton instance is created when
+      class is loaded into memory.</p>
+    <p><strong>Give me some examples of Singleton pattern from Java Development
+        Kit?</strong></p>
+    <p>This is open question to all, please share which classes are Singleton in
+      JDK. Answer to this question is java.lang.Runtime<br>
+      Answer : There are many classes in Java Development Kit which is written
+      using singleton pattern, here are few of them:<br>
+      Java.lang.Runtime with getRuntime() method<br>
+      Java.awt.Toolkit with getDefaultToolkit()<br>
+      Java.awt.Desktop with getDesktop()</p>
+    <p><strong>What is double checked locking in Singleton?</strong></p>
+    <p>One of the most hyped question on Singleton pattern and really demands
+      complete understanding to get it right because of Java Memory model caveat
+      prior to Java 5. If a guy comes up with a solution of using volatile
+      keyword with Singleton instance and explains it then it really shows it
+      has in depth knowledge of Java memory model and he is constantly updating
+      his Java knowledge.</p>
+    <p>Answer : Double checked locking is a technique to prevent creating
+      another instance of Singleton when call to getInstance() method is made in
+      multi-threading environment. In Double checked locking pattern as shown in
+      below example, singleton instance is checked two times before
+      initialization. See here to learn more about double-checked-locking in
+      Java.</p>
+    <p style="margin-left: 40px;">public static Singleton getInstance(){<br>
+      &nbsp;&nbsp;&nbsp;&nbsp; if(_INSTANCE == null){<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      synchronized(Singleton.class){<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //double checked locking
+      - because second check of Singleton instance with lock<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      if(_INSTANCE == null){<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      _INSTANCE = new Singleton();<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      }<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+      &nbsp;&nbsp;&nbsp;&nbsp; return _INSTANCE;<br>
+      }</p>
+    <p>Double checked locking should only be used when you have requirement for
+      lazy initialization otherwise use Enum to implement singleton or simple
+      static final variable.</p>
+    <p><strong>How do you prevent for creating another instance of Singleton
+        using clone() method?</strong></p>
+    <p>This type of questions generally comes some time by asking how to break
+      singleton or when Singleton is not Singleton in Java.</p>
+    <p>Answer : Preferred way is not to implement Cloneable interface as why
+      should one wants to create clone() of Singleton and if you do just throw
+      Exception from clone() method as ?Can not create clone of Singleton
+      class?.</p>
+    <p><strong>How do you prevent for creating another instance of Singleton
+        using reflection?</strong></p>
+    <p>Open to all. In my opinion throwing exception from constructor is an
+      option.<br>
+      Answer: This is similar to previous interview question. Since constructor
+      of Singleton class is supposed to be private it prevents creating instance
+      of Singleton from outside but Reflection can access private fields and
+      methods, which opens a threat of another instance. This can be avoided by
+      throwing Exception from constructor as ?Singleton already initialized?</p>
+    <p><strong>How do you prevent for creating another instance of Singleton
+        during serialization?</strong></p>
+    <p>Another great question which requires knowledge of Serialization in Java
+      and how to use it for persisting Singleton classes. This is open to you
+      all but in my opinion use of readResolve() method can sort this out for
+      you.<br>
+      Answer: You can prevent this by using readResolve() method, since during
+      serialization readObject() is used to create instance and it return new
+      instance every time but by using readResolve you can replace it with
+      original Singleton instance. I have shared code on how to do it in my post
+      Enum as Singleton in Java. This is also one of the reason I have said that
+      use Enum to create Singleton because serialization of enum is taken care
+      by JVM and it provides guaranteed of that.</p>
+    <p><strong>When is Singleton not a Singleton in Java?</strong></p>
+    <p>There is a very good article present in Sun's Java site which discusses
+      various scenarios when a Singleton is not really remains Singleton and
+      multiple instance of Singleton is possible. Here is the link of that
+      article
+      http://java.sun.com/developer/technicalArticles/Programming/singletons/</p>
+    <p><strong>Why you should avoid the singleton anti-pattern at all and
+        replace it with DI?</strong></p>
+    <p>Answer : Singleton Dependency Injection: every class that needs access to
+      a singleton gets the object through its constructors or with a
+      DI-container.</p>
+    <p><strong>Why Singleton is Anti pattern</strong></p>
+    <p>With more and more classes calling getInstance() the code gets more and
+      more tightly coupled, monolithic, not testable and hard to change and hard
+      to reuse because of not configurable, hidden dependencies. Also, there
+      would be no need for this clumsy double checked locking if you call
+      getInstance less often (i.e. once).</p>
+    <p><strong>How many ways you can write Singleton Class in Java?</strong></p>
+    <p>Answer : I know at least four ways to implement Singleton pattern in Java<br>
+      Singleton by synchronizing getInstance() method<br>
+      Singleton with public static final field initialized during class loading.<br>
+      Singleton generated by static nested class, also referred as Singleton
+      holder pattern.<br>
+      From Java 5 on-wards using Enums</p>
+    <p><strong>How to write thread-safe Singleton in Java?</strong></p>
+    <p>Answer : Thread safe Singleton usually refers to write thread safe code
+      which creates one and only one instance of Singleton if called by multiple
+      thread at same time. There are many ways to achieve this like by using
+      double checked locking technique as shown above and by using Enum or
+      Singleton initialized by class loader.</p>
+    <p><br>
+      Read more:
+http://javarevisited.blogspot.com/2011/03/10-interview-questions-on-singleton.html#ixzz3dA3n2g7b</p>
+    <p><br>
+      <strong>Can you write code for iterating over HashMap in Java 4 and Java 5
+        ?</strong><br>
+      Tricky one but he managed to write using while and for loop. Actually
+      there are four ways to iterate over any Map in Java, one involves using
+      keySet() and iterating over key and then using get() method to retrieve
+      values, which is bit expensive. Second method involves using entrySet()
+      and iterating over them either by using foreach loop or while with
+      Iterator.hasNext() method. This one is better approach because both key
+      and value object are available to you during Iteration and you don't need
+      to call get() method for retrieving value, which could give O(n)
+      performance in case of huge linked list at one bucket. See my post 4 ways
+      to iterate over Map in Java for detailed explanation and code examples.</p>
+    <p><strong>When do you override hashcode() and equals() ?</strong><br>
+      Whenever necessary especially if you want to do equality check based upon
+      business logic rather than object equality e.g. two employee object are
+      equal if they have same emp_id, despite the fact that they are two
+      different object, created by different part of code. Also overriding both
+      these methods are must if you want to use them as key in HashMap. Now as
+      part of equals-hashcode contract in Java, when you override equals, you
+      must override hashcode as well, otherwise your object will not break
+      invariant of classes e.g. Set, Map which relies on equals() method for
+      functioning properly. You can also check my post 5 tips on equals in Java
+      to understand subtle issue which can arise while dealing with these two
+      methods.</p>
+    <p><strong>What will be the problem if you don't override hashcode() method
+        ?</strong><br>
+      If you don't override equals method, than contract between equals and
+      hashcode will not work, according to which, two object which are equal by
+      equals() must have same hashcode. In this case other object may return
+      different hashcode and will be stored on that location, which breaks
+      invariant of HashMap class, because they are not supposed to allow
+      duplicate keys. When you add object using put() method, it iterate through
+      all Map.Entry object present in that bucket location, and update value of
+      previous mapping, if Map already contains that key. This will not work if
+      hashcode is not overridden. You can also see my post on tips to override
+      hashcode in Java for more details.</p>
+    <p><strong>Is it better to synchronize critical section of getInstance()
+        method or whole getInstance() method?</strong><br>
+      Answer is only critical section, because if we lock whole method than
+      every time some some one call this method, it will have to wait even
+      though we are not creating any object. In other words, synchronization is
+      only needed, when you create object, which happens only once. Once object
+      has created, there is no need for any synchronization. In fact, that's
+      very poor coding in terms of performance, as synchronized method reduce
+      performance upto 10 to 20 times. By the way, there are several ways to
+      create thread-safe singleton in Java, which you can also mention as part
+      of this question or any follow-up.</p>
+    <p><strong>What is the difference when String is gets created using literal
+        or new() operator?</strong><br>
+      When we create string with new() operator, its created in heap only and
+      not added into string pool, while String created using literal are created
+      in String pool itself which exists in PermGen area of heap. You can put
+      such string object into pool by calling intern() method. If you happen to
+      create same String object multiple times, intern() can save some memory
+      for you.</p>
+    <p><strong>Does not overriding hashcode() method has any performance
+        implication ?</strong><br>
+      This is a good question and open to all , as per my knowledge a poor
+      hashcode function will result in frequent collision in HashMap which
+      eventually increase time for adding an object into Hash Map.</p>
+    <p><strong>What?s wrong using HashMap in multithreaded environment? When
+        get() method go to infinite loop?</strong><br>
+      Well nothing is wrong, it depending upon how you use. For example if you
+      initialize the HashMap just by one thread and then all threads are only
+      reading from it, then it's perfectly fine. One example of this is a Map
+      which contains configuration properties. Real problem starts when at-least
+      one of those thread is updating HashMap i.e. adding, changing or removing
+      any key value pair. Since put() operation can cause re-sizing and which
+      can further lead to infinite loop, that's why either you should use
+      Hashtable or ConcurrentHashMap, later is better.</p>
+    <p>Give a simplest way to find out the time a method takes for execution
+      without using any profiling tool?<br>
+      this questions is suggested by @Mohit<br>
+      Read the system time just before the method is invoked and immediately
+      after method returns. Take the time difference, which will give you the
+      time taken by a method for execution.</p>
+    <p>To put it in code?</p>
+    <p>long start = System.currentTimeMillis ();<br>
+      method ();<br>
+      long end = System.currentTimeMillis ();</p>
+    <p>System.out.println (?Time taken for execution is ? + (end ? start));</p>
+    <p>Remember that if the time taken for execution is too small, it might show
+      that it is taking zero milliseconds for execution. Try it on a method
+      which is big enough, in the sense the one which is doing considerable
+      amount of processing</p>
+    <p>&nbsp;</p>
+    <p>Question 20. How would you prevent a client from directly instantiating
+      your concrete classes? For example, you have a Cache interface and two
+      implementation classes MemoryCache and DiskCache, How do you ensure there
+      is no object of this two classes is created by client using new() keyword.<br>
+      I leave this question for you to practice and think about, before I give
+      answer. I am sure you can figure out right way to do this, as this is one
+      of the important decision to keep control of classes in your hand, great
+      from maintenance perspective.</p>
+    <p><br>
+      I am also very grateful to my readers who have generously contributed
+      several good questions from Java Interviews for both beginners and
+      experienced developers alike. I have already answered many of these
+      question in this blog and you can easily find relevant post by using
+      search box at top right corner of this page.<br>
+      Core Java Interview Questions and Answers</p>
+    <p><br>
+      Some of the Interview questions for senior developers :</p>
+    <p>1. Difference between Abstract class and Interface - given a situation
+      what would you choose between abstract class and interface? (answer)<br>
+      2) Difference between inheritance and composition? (answer)<br>
+      3. Difference between ArrayList and linked list? (answer)<br>
+      4. Difference between sleep and wait? (answer)<br>
+      5. Explain about HashMap ( methods in hashmap and&nbsp; the project in
+      which we have used the hashmap more about equalsto and hashcode)&nbsp;
+      (answer)<br>
+      6. Explain about the methods in Object class? (answer)<br>
+      7. What is coupling?<br>
+      8. Struts config file - can there be multiple configs? (answer)<br>
+      9. Design patterns - factory , abstract factory, singleton implemented?
+      (answer)</p>
+    <p><br>
+      1) Junior Java developer<br>
+      a) Basic ocjp (former scjp) questions:<br>
+      ? What does static, final mean, purposes; (answer)<br>
+      ? How many accesibility modifiers exist? Please describe them. (answer)<br>
+      ? Why do you need a main method? (answer)<br>
+      ? How many constructors can you have?<br>
+      ? Define overwriting and overloading? (answer)<br>
+      ? Give java API implementations for overwriting and overloading<br>
+      ? Describe the String class ? unique properties (answer)<br>
+      ? StringBuilder vs StringBuffer (answer)<br>
+      ? Collections : please describe, give some examples and compare them to
+      eachother<br>
+      ? ArrayList vs Vector (answer)<br>
+      ? HashMap vs HashTable (answer)<br>
+      ? What?s a tree<br>
+      ? What?s a map<br>
+      ? Multithreading: describe the management in java<br>
+      ? What?s a semaphore? (answer)<br>
+      ? How many states are there for threads?<br>
+      ? Describe the usage for synchronized word (2)? (examples)<br>
+      ? Serialization in java ? a description and usage? (example)<br>
+      ? Garbage collection in java ? description and usage<br>
+      ? Can you guarantee the garbage collection process? No<br>
+      b) Simple design pattern questions:<br>
+      ? Singleton please describe main features and coding (answer)<br>
+      ? Factory please describe main features and coding (answer)<br>
+      ? Have you used others? please describe them</p>
+    <p><br>
+      Here is the latest questions contributed by Anand Vijay Kumar<br>
+      Given it's 2013, Java Interviews has changed a lot with more focus on JVM
+      internals, Garbage Collection tuning and performance improvement. Here is
+      a list of questions, which I have faced recently in Java interviews :</p>
+    <p>1) What is Composite design pattern?<br>
+      2) Explain Liskov substitution principle ?<br>
+      3) Write a Java program to convert bytes to long?<br>
+      4) What is false sharing in multithreading Java?<br>
+      5) Can we make an array volatile in Java? What is effect of making it
+      volatile? (answer)<br>
+      6) What is advantage and disadvantage of busy spin waiting strategy?
+      (answer)<br>
+      7) Difference between DOM and SAX parser in Java? (answer)<br>
+      8) Write wait notify code for producer consumer problem? (solution)<br>
+      9) Write code for thread-safe Singleton in Java? (answer)<br>
+      10) What are 4 ways to iterate over Map in Java? Which one is best and
+      why? (solution)<br>
+      11) Write code to remove elements from ArrayList while iterating?
+      (example)<br>
+      12) is Swing thread-safe? (answer)<br>
+      13) What is thread local variable in Java? (answer)<br>
+      14) How do you convert an String to date in Java? (example)<br>
+      15) Can we use String in switch case? (Yes)<br>
+      16) What is constructor chaining in Java? (answer)<br>
+      17) Explain Java Heap space and Garbage collection? (answer)<br>
+      18) Difference between major and minor GC? (answer)<br>
+      19) Difference between -Xmx and -Xms JVM option? (answer)<br>
+      20) How to check if a String contains only numeric digits? (regular
+      expression)<br>
+      21) Difference between poll() and remove() method of Queue in Java?<br>
+      22) Difference between Comparator and Comparable in Java? (answer)<br>
+      23) Why you need to override hashcode, when you override equals in Java?
+      (answer)<br>
+      24) How HashSet works internally in Java? (answer)<br>
+      25) How do you print Array in Java? (answer)</p>
+    <p>This is one from our Anonymous reader but useful to people going for
+      interview on Investment Banks<br>
+      Some exercises for an interview that I had with Morgan Stanley(in 2014):</p>
+    <p>1. Explain what 'path to root' means in the context of garbage
+      collection. What are roots?<br>
+      2. Write code for a simple implementation of HashMap/Hashtable<br>
+      3. Write a short program to illustrate the concept of deadlock<br>
+      4. Explain why recursive implementation of QuickSort will require O(log n)
+      of additional space<br>
+      5. Explain the design pattern used in Java and .NET io stream/reader APIs.<br>
+      6. Create an Iterator filtering framework: an IObjectTest interface with a
+      single boolean test(Object o) method and an Iterator sub-class which is
+      initialized with another Iterator and an IObjectTest instance. Your
+      iterator will then allow iteration over the original, but skipping any
+      objects which don't pass the test. Create a simple unit test for this
+      framework.</p>
+    <p><strong>How do you handle error condition while writing stored procedure
+        or accessing stored procedure from java?</strong></p>
+    <p>This is one of the tough Java interview question and its open for all, my
+      friend didn't know the answer so he didn't mind telling me. My take is
+      that stored procedure should return error code if some operation fails but
+      if stored procedure itself fail than catching SQLException is only choice.</p>
+    <p><br>
+      Read more: <a href="http://javarevisited.blogspot.com/2011/04/top-20-core-java-interview-questions.html#ixzz3cURSvslc">http://javarevisited.blogspot.com/2011/04/top-20-core-java-interview-questions.html#ixzz3cURSvslc</a></p>
+    <p>&nbsp;</p>
+    <h2>GENERICS</h2>
+    <p><strong>Why Use Generics?</strong></p>
+    <p>Code that uses generics has many benefits over non-generic code:</p>
+    <ul>
+      <li>Stronger type checks at compile time.</li>
+    </ul>
+    <p style="margin-left: 80px;">A Java compiler applies strong type checking
+      to generic code and issues errors if the code violates type safety. Fixing
+      compile-time errors is easier than fixing runtime errors, which can be
+      difficult to find.</p>
+    <ul>
+      <li>Elimination of casts.</li>
+    </ul>
+    <p style="margin-left: 80px;">The following code snippet without generics
+      requires casting:<br>
+      <em>List list = new ArrayList();<br>
+        list.add("hello");<br>
+        String s = (String) list.get(0);</em></p>
+    <p style="margin-left: 80px;"><br>
+      When re-written to use generics, the code does not require casting:<br>
+      <em>List<string> list = new ArrayList<string>();<br>
+            list.add("hello");<br>
+            String s = list.get(0);&nbsp;&nbsp; // no cast</string></string></em></p>
+    <ul>
+      <li><em>Enabli</em>ng programmers to implement generic algorithms.</li>
+    </ul>
+    <p style="margin-left: 80px;">By using generics, programmers can implement
+      generic algorithms that work on collections of different types, can be
+      customized, and are type safe and easier to read</p>
+    <p>Type Parameter Naming Conventions</p>
+    <p>The most commonly used type parameter names are:</p>
+    <p>E - Element (used extensively by the Java Collections Framework)<br>
+      K - Key<br>
+      N - Number<br>
+      T - Type<br>
+      V - Value<br>
+      S,U,V etc. - 2nd, 3rd, 4th types</p>
+    <p><strong>Raw Types</strong></p>
+    <p>A raw type is the name of a generic class or interface without any type
+      arguments. For example, given the generic Box class:</p>
+    <p style="margin-left: 40px;">public class Box<t> {<br>
+        &nbsp;&nbsp;&nbsp; public void set(T t) { /* ... */ }<br>
+        &nbsp;&nbsp;&nbsp; // ...<br>
+        }</t></p>
+    <p>To create a parameterized type of Box<t>, you supply an actual type
+        argument for the formal type parameter T:</t></p>
+    <p>Box<integer> intBox = new Box&lt;&gt;();<br>
+        If the actual type argument is omitted, you create a raw type of Box<t>:</t></integer></p>
+    <p>Box rawBox = new Box();</p>
+    <p><strong>Bounded Type Parameters</strong></p>
+    <p>There may be times when you want to restrict the types that can be used
+      as type arguments in a parameterized type. For example, a method that
+      operates on numbers might only want to accept instances of Number or its
+      subclasses. This is what bounded type parameters are for.</p>
+    <p style="margin-left: 40px;">&nbsp; &nbsp; public <u extends="" number="">
+        void inspect(U u){<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println("T: " +
+        t.getClass().getName());<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println("U: " +
+        u.getClass().getName());<br>
+        &nbsp;&nbsp;&nbsp; }</u></p>
+    <p><u extends="" number="">Multiple Bounds&nbsp; <t b1="" b2="" b3="" extends=""></t></u></p>
+    <p><u extends="" number="">&nbsp;</u></p>
+    
+  </body>
+</html>

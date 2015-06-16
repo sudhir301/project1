@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>load demo</title>
+    <style type="text/css"><!--
+    body{
+        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
+        font-size : 20px;
+        width : 1080px;
+    }
+-->
+	</style>
+    <script src="../js/jquery-2.1.4.js"></script>
+  </head>
+  <body>
+    <p><a href="http://tutorials.jenkov.com/java-concurrency/index.html">http://tutorials.jenkov.com/java-concurrency/index.html</a>
+      <!--
+<table border="1" width="100%">	<tbody>		<tr>			<td colspan="2">Header Header Header Header Header Header Header Header Header Header Header Header Header Header</td>
+		</tr>		<tr>			<td width="20%">			<div id="leftPane">&nbsp;</div>
+			</td>			<td width="80%">main info</td>		</tr>		<tr>
+			<td colspan="2">footer</td>		</tr>	</tbody></table>
+--> <script>
+    $( document ).ready(function() {
+    	console.log( "ready!" );
+    	$( "#leftPane" ).load( "leftTab.html", function() {
+    		  alert( "Load was performed." );
+    	});
+	});
+    </script></p>
+    <p>&nbsp;</p>
+    JAVA CORE<br>
+    <ul>
+      <li><a href="javacore/1faq.html">FAQ 1</a></li>
+      <li><a href="javacore/2faq.html">FAQ 2</a></li>
+    </ul>
+  </body>
+</html>
