@@ -246,24 +246,26 @@
       pause times can be expected on hosts with more than two CPUs. The Parallel
       GC comes in two flavors.</p>
     <p><strong>Usage Cases</strong></p>
-    <p>The Parallel collector is also called a throughput collector. Since it
-      can use multilple CPUs to speed up application throughput. This collector
-      should be used when a lot of work need to be done and long pauses are
-      acceptable. For example, batch processing like printing reports or bills
-      or performing a large number of database queries.</p>
+    <p>The Parallel collector is also called a <strong>throughput collector</strong>.
+      Since it can use multilple CPUs to speed up application throughput. This
+      collector should be used when a lot of work need to be done and long
+      pauses are acceptable. For example, batch processing like printing reports
+      or bills or performing a large number of database queries.</p>
     <p><strong>-XX:+UseParallelGC</strong></p>
-    <p>With this command line option you get a multi-thread young generation
-      collector with a single-threaded old generation collector. The option also
-      does single-threaded compaction of old generation.</p>
+    <p>With this command line option you get a <strong>multi-thread young
+        generation collector with a single-threaded old generation</strong>
+      collector. The option also does single-threaded compaction of old
+      generation.</p>
     <p>Here is a sample command line for starting the Java2Demo:<br>
       java -Xmx12m -Xms3m -Xmn1m -XX:PermSize=20m -XX:MaxPermSize=20m
       -XX:+UseParallelGC -jar c:\javademos\demo\jfc\Java2D\Java2demo.jar</p>
     <p><strong>-XX:+UseParallelOldGC</strong></p>
-    <p>With the -XX:+UseParallelOldGC option, the GC is both a multithreaded
-      young generation collector and multithreaded old generation collector. It
-      is also a multithreaded compacting collector. HotSpot does compaction only
-      in the old generation. Young generation in HotSpot is considered a copy
-      collector; therefore, there is no need for compaction.</p>
+    <p>With the -XX:+UseParallelOldGC option, the GC is both a<strong>
+        multithreaded young generation collector and multithreaded old
+        generation collector</strong>. It is also a multithreaded compacting
+      collector. HotSpot does compaction only in the old generation. Young
+      generation in HotSpot is considered a copy collector; therefore, there is
+      no need for compaction.</p>
     <p>Compacting describes the act of moving objects in a way that there are no
       holes between objects. After a garbage collection sweep, there may be
       holes left between live objects. Compacting moves objects so that there
@@ -514,12 +516,10 @@ http://javarevisited.blogspot.com/2012/10/10-garbage-collection-interview-questi
     <strong>Update: </strong><br>
     Regarding default heap size in Java, from Java 6 update 18 there are
     significant changes in how JVM calculates default heap size in 32 and 64 bit
-    machine and on client and server JVM mode:
-    <br>
+    machine and on client and server JVM mode: <br>
     <ol>
       <li>Initial heap space and maximum heap space is larger for improved
-        performance.
-      </li>
+        performance. </li>
       <li>Default maximum heap space is 1/2 of physical memory of size upto 192
         bytes and 1/4th of physical memory for size upto 1Gig. So for 1Gig
         machine maximum heap size is 256MB 2.maximum heap size will not be used
@@ -587,14 +587,12 @@ http://javarevisited.blogspot.com/2012/10/10-garbage-collection-interview-questi
     <strong>10 Points about Java Heap Space </strong><br>
     <ol>
       <li>Java Heap Memory is part of memory allocated to JVM by Operating
-        System.
-      </li>
+        System. </li>
       <li>Whenever we create objects they are created inside Heap in Java. </li>
       <li>Java Heap space is divided into three regions or generation for sake
         of garbage collection called New Generation, Old or tenured Generation
         or Perm Space. Permanent generation is garbage collected during full gc
-        in hotspot JVM.
-      </li>
+        in hotspot JVM. </li>
       <li>You can increase or change size of Java Heap space by using JVM
         command line option -Xms, -Xmx and -Xmn. don't forget to add word "M" or
         "G" after specifying size to indicate Mega or Gig. for example you can
@@ -605,13 +603,11 @@ http://javarevisited.blogspot.com/2012/10/10-garbage-collection-interview-questi
         programmatic in Java. See my post How to find memory usage in Java
         program for more details. </li>
       <li>You can use command "jmap" to take Heap dump in Java and "jhat" to
-        analyze that heap dump.
-      </li>
+        analyze that heap dump. </li>
       <li>Java Heap space is different than Stack which is used to store call
         hierarchy and local variables. </li>
       <li>Java Garbage collector is responsible for reclaiming memory from dead
-        object and returning to Java Heap space.
-      </li>
+        object and returning to Java Heap space. </li>
       <li>Don't panic when you get java.lang.OutOfMemoryError, sometimes its
         just matter of increasing heap size but if it's recurrent then look for
         memory leak in Java. </li>
