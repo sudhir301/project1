@@ -47,27 +47,53 @@
     </table>
     <p><a href="http://tutorials.jenkov.com/java-concurrency/index.html">http://tutorials.jenkov.com/java-concurrency/index.html</a>
     
-    <p><a id="testLoad" onclick="testClick()" href="">Load Page</a>
+    <p><a id="testLoad" onclick="testClick()" href="">Load Page</a></p>
+    <p><a href="javacore/stringLiteral.html">StringLiteral</a></p>
+    <p><a href="javacore/sample.html">sample.html</a></p>
     
       <!--
 <table border="1" width="100%">	<tbody>		<tr>			<td colspan="2">Header Header Header Header Header Header Header Header Header Header Header Header Header Header</td>		</tr>		<tr>			<td width="20%">			<div id="leftPane">&nbsp;</div>			</td>			<td width="80%">main info</td>		</tr>		<tr>			<td colspan="2">footer</td>		</tr>	</tbody></table>-->
      <div id="pageContent"> </div>
      
       <script>
-
-      function testClick(){
-    	  alert( 'Onclick event.');
-    	  $( "#pageContent").html("This is test content");
-    	  alert(getImgRelativePath());
-      }
-      function getImgRelativePath(){
-      	pathName1 = window.location.pathname;
-      	var contextProj = pathName1.substring(0, pathName1.lastIndexOf("/")+1);
-      	return contextProj ;
-      }
-      
-
-    </script></p>
+		$(document).ready(function(){
+			$('a').click(function() {
+				$('#pageContent').load($(this).attr('href'), function( response, status, xhr ) {
+					  if ( status == "success" ) {
+						  alert("successfully done");
+						  setImgSrc();
+					  }
+				});
+				var urlPath = $(this).attr('href');
+				alert(urlPath.substring(0, urlPath.lastIndexOf("/")+1))
+				//$('#pageContent').$('img').attr('src','second.jpg');
+				return false;
+			});
+			$("img").load(function(){
+			    alert("Image loaded.");
+			});
+			//alert("window.location.host"+window.location.host);
+			$('img').load(function() {  
+				 alert("load image inside doc");
+			});
+// 				var loc = this.src;
+// 				  loc = loc.substring(0, loc.lastIndexOf("/img/"));
+// 				  alert("loc : "+loc);   
+// 			});   
+		});      
+	  
+		
+	  function setImgSrc(){
+		  alert("inside method ")
+		   $('img').each(function() {
+			   var urlPath =  "http://"+window.location.host +"/faq"+$(this).attr('data-src');
+			   alert($(this).attr('data-src'));
+			   alert("urlPath : "+ urlPath) 
+			   $(this).attr('src',urlPath );
+			});
+	  }	
+	  
+    </script>
     
   </body>
 </html>
