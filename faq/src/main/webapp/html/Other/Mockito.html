@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>Insert the Title</title>
+    <style type="text/css"><!--
+    body{
+        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
+        font-size : 20px;
+        width : 1080px;
+    }
+-->
+	</style>
+</head>
+<body>
+ <h2 style="text-align: center;">Page Header</h2>
+
+Stub vs Mock Objects in Java testing
+
+
+As I said both Stub and Mock are dummy object, but more precisely, a Stub is an object that simulates real objects with the minimum number of methods required for a test. For example, if your class is dependent upon database, you can use HashMap to simulate database operation. Stub object is mostly created by developers and there method is implemented in predetermined way, they mostly return hard coded values. They also provide methods to verify methods to access stub's internal state, which is necessary to verify internal state of object. On the other Mock objects are usually created by open source library and mock framework like Mockito, jMock and EasyMock. These library helps to create, verify and stub mocks. Mock object has knowledge of how it's methods are executed in a unit test, and it verifies if methods are actually get called against the expected ones. Apart from first difference that mock objects are usually created by mock framework, another key difference between Stub and Mock object is how they are used.  Stub object is usually used for state verification, while mock object is mostly used for behaviour verification. As a Java developer, you can take advantage of this powerful testing techniques to test your module in isolation.
+
+Read more: http://javarevisited.blogspot.com/2014/04/difference-between-stub-and-mock-object-java-junit.html#ixzz3dsw1WS6G
+</body>
+</html>
+

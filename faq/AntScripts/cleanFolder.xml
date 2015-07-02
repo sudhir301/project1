@@ -1,0 +1,7 @@
+<project name="YourName" default="clean">
+  <target name="clean">
+  <delete>
+    <fileset dir="../src" includes="**/*.bak/"/>
+  </delete>
+  </target>
+</project>
