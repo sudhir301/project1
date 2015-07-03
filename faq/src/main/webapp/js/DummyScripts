@@ -1,0 +1,11 @@
+	  
+	  			$('a').click(function() {
+	  				alert("Test 1223232 ");
+	   				$('#pageContent').load($(this).attr('href'), function( response, status, xhr ) {
+	  					  if ( status == "success" ) {
+	  						  alert("successfully done");
+	  						  setImgSrc();
+	  					  }
+	  				}); 
+	  				return false;
+			});

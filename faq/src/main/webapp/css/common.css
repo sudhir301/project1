@@ -3,6 +3,44 @@
  body{
      font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
      font-size : 20px;
-     width : 1080px;
+/*      width : 1080px; */
      line-height: 1.5;        
  }
+ 
+ul {
+  margin: 0 0 0 10px;
+  padding: 0 0 0 20px;
+}
+
+li {
+  margin: 0px;
+}
+h1 {
+	 margin: 0px;
+}
+p.codeblock {
+	margin: 10px; 
+	padding: 0.2em 0.6em; 
+	border: 1px dotted; 
+	font-family: Arial, Tahoma, Verdana; 
+	font-size: 18px; 
+	font-style: normal; 
+	font-variant: normal; 
+	font-weight: normal; 
+	font-stretch: inherit; 
+	line-height: 22px; 
+	vertical-align: baseline; 
+	color: rgb(47, 46, 46); 
+	letter-spacing: normal; 
+	orphans: auto; 
+	text-align: left; 
+	text-indent: 0px; 
+	text-transform: none; 
+	white-space: normal; 
+	widows: 1; 
+	word-spacing: 0px; 
+	-webkit-text-stroke-width: 0px; 
+	overflow: auto; 
+	width: auto; 
+	background: rgb(243, 243, 243);
+}

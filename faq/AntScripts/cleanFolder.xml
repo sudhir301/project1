@@ -1,7 +1,12 @@
 <project name="YourName" default="clean">
-  <target name="clean">
-  <delete>
-    <fileset dir="../src" includes="**/*.bak/"/>
-  </delete>
-  </target>
+	<target name="clean">
+		<delete verbose="true">
+			<fileset dir="../src" includes="**/*.bak/"/>
+		</delete>
+		<echo message="Cleared the .bak Files"/>
+		<delete verbose="true" includeEmptyDirs="true">
+			<fileset dir="../target" includes="**/*.class"/>
+		</delete>
+		<echo message="Cleared the .class Files"/>
+	</target>
 </project>
