@@ -3,92 +3,79 @@
   <head>
     <meta content="text/html; charset=utf-8" http-equiv="content-type">
     <title>load demo</title>
-    <style type="text/css"><!--
-    body{
-        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
-        font-size : 20px;
-        width : 1080px;
-    }
--->
-	</style>
+    <link rel="stylesheet" type="text/css" href="../css/common.css">
     <script src="../js/jquery-2.1.4.js"></script>
   </head>
   <body>
-    <p>&nbsp;</p>
-    <table style="width: 1087px; height: 247px;" border="1">
-      <tbody>
-        <tr>
-          <td>&nbsp;&nbsp;&nbsp;&nbsp; FAQ </td>
-          <td>&nbsp;&nbsp; Main Documents</td>
-        </tr>
-        <tr>
-          <td style="width: 381.55px;vertical-align: text-top;">
-            <ul>
-              <li><a href="javacore/1faq.html">FAQ 1</a></li>
-              <li><a href="javacore/2faq.html">FAQ 2</a></li>
-            </ul>
-          </td>
-          <td style="width: 682.45px;vertical-align: text-top;">
-            <ul>
-              <li><a href="javacore/Collections.html">Collections</a></li>
-              <li><a href="javacore/CountDownLatch.html">CountDownLatch</a></li>
-              <li><a href="javacore/CyclicBarrier.html">Cyclic Barrier</a></li>
-              <li><a href="javacore/equalsAndHashCode.html">Equals &amp;
-                  HashCode</a></li>
-              <li><a href="javacore/garbageCollector.html">Garbage Collection
-                  &amp; Heap</a></li>
-              <li><a href="javacore/immutableClass.html">Immutable Class</a></li>
-              <li><a href="javacore/stringLiteral.html">StringLiteral</a></li>
-            </ul>
-            <br>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <p><a href="http://tutorials.jenkov.com/java-concurrency/index.html">http://tutorials.jenkov.com/java-concurrency/index.html</a>
-    
-    <p><a id="testLoad" onclick="testClick()" href="">Load Page</a></p>
-    <p><a href="javacore/stringLiteral.html">StringLiteral</a></p>
-    <p><a href="javacore/sample.html">sample.html</a></p>
-    
-      <!--
-<table border="1" width="100%">	<tbody>		<tr>			<td colspan="2">Header Header Header Header Header Header Header Header Header Header Header Header Header Header</td>		</tr>		<tr>			<td width="20%">			<div id="leftPane">&nbsp;</div>			</td>			<td width="80%">main info</td>		</tr>		<tr>			<td colspan="2">footer</td>		</tr>	</tbody></table>-->
-     <div id="pageContent"> </div>
-     
-      <script>
+	<table width="100%" height="1000">
+		<tbody>
+			<tr>
+				<td colspan="3" align="center" height="10px"><H1>Tool of Question Bank</H1><hr style="background: rgb(0, 0, 0);" /></td>
+			</tr>
+			<tr>
+				<td width="20%" style="vertical-align: text-top;">
+					<div id="leftPane">&nbsp;</div>
+				</td>
+				<td width="2px" style="background: rgb(0, 0, 0);"></td>
+				<td width="80%" style="padding-left:20px">
+					<div id="pageContent"></div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" style="text-align:right;vertical-align: bottom; height:10px;"></td>
+			</tr>
+		</tbody>
+	</table>
+
+
+	<script>
 		$(document).ready(function(){
-			$('a').click(function() {
-				$('#pageContent').load($(this).attr('href'), function( response, status, xhr ) {
-					  if ( status == "success" ) {
-						  alert("successfully done");
-						  setImgSrc();
-					  }
-				});
-				var urlPath = $(this).attr('href');
-				alert(urlPath.substring(0, urlPath.lastIndexOf("/")+1))
-				//$('#pageContent').$('img').attr('src','second.jpg');
-				return false;
-			});
-			$("img").load(function(){
-			    alert("Image loaded.");
-			});
-			//alert("window.location.host"+window.location.host);
-			$('img').load(function() {  
-				 alert("load image inside doc");
-			});
-// 				var loc = this.src;
-// 				  loc = loc.substring(0, loc.lastIndexOf("/img/"));
-// 				  alert("loc : "+loc);   
-// 			});   
+			console.log("Step 111");
+			 $.getJSON( "lefttab.json", function(data, status, xhr ) {
+				console.log("status :" +status);
+				console.log("Step 12222");
+			 	loadLeftPane(data);
+			 }).fail(function( jqxhr, textStatus, error ) {
+				var err = textStatus + ", " + error;
+				console.log( "Request Failed: " + err );
+			 });
 		});      
 	  
-		
+	 function loadLeftPane(data1){
+		 console.log(data1);
+		 output = "<ul>";
+         for (var i in data1.urlData) {
+        	 console.log("i="+i);
+             output+="<li>" + data1.urlData[i].categoryName + "</li>";
+             output+="<ul>"
+             for (var j in data1.urlData[i].links) {
+            	 output+="<li><a href='#' onclick=\"loadOnclick(\'"+ data1.urlData[i].links[j].displayUrl +"\')\">" +  data1.urlData[i].links[j].displayName + "</a></li>";
+             }
+             output+="</ul>"
+        }
+         output+="</ul>"
+        $('#leftPane').html(output);  
+	 }
+	 
+	 function loadOnclick(path1){
+		//alert("Test 45893499 : " + path1 );
+		$('#pageContent').load(path1, function( response, status, xhr ) {
+			if ( status == "success" ) {
+				//alert("successfully done");
+				setImgSrc();
+			}
+		}).fail(function( jqxhr, textStatus, error ) {
+			var err = textStatus + ", " + error;
+			console.log( "Load the file : " + err );
+		 }); 
+	  }
+	  
 	  function setImgSrc(){
-		  alert("inside method ")
+		  //alert("inside method ")
 		   $('img').each(function() {
 			   var urlPath =  "http://"+window.location.host +"/faq"+$(this).attr('data-src');
-			   alert($(this).attr('data-src'));
-			   alert("urlPath : "+ urlPath) 
+			   //alert($(this).attr('data-src'));
+			   //alert("urlPath : "+ urlPath) 
 			   $(this).attr('src',urlPath );
 			});
 	  }	

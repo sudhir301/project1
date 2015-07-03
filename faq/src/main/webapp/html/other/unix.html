@@ -1,0 +1,329 @@
+<html>
+  <head>
+    <meta content="text/html; charset=windows-1252" http-equiv="content-type">
+  </head>
+  <body class="codeblock">
+    <div style="text-align: center;">
+      <h1>UNIX </h1>
+    </div>
+    <strong>What is UNIX? </strong><br>
+    It is a portable operating system that is designed for both efficient
+    multi-tasking and mult-user functions. Its portability allows it to run on
+    different hardware platforms. It was written is C and lets user do
+    processing and control under a shell. <br>
+    <br>
+    <strong>What are filters? </strong><br>
+    The term Filter is often used to refer to any program that can take input
+    from standard input, perform some operation on that input, and write the
+    results to standard output. A Filter is also any program that can be used
+    between two other programs in a pipeline. <br>
+    <br>
+    <strong>What is a typical syntax being followed when issuing commands in
+      shell? </strong> <br>
+    Typical command syntax under the UNIX shell follows the format: <br>
+    Command [-argument] [-argument] [–argument] [file] <br>
+    <br>
+    <strong>Is there a way to erase all files in the current directory,
+      including all its sub-directories, using only one command? </strong> <br>
+    Yes, that is possible. Use “<strong>rm –r *</strong>” for this purpose. <br>
+    The <strong>rm</strong> command is for deleting files. <br>
+    The <strong>–r</strong> option will erase directories and subdirectories,
+    including files within. The asterisk represents all entries. <br>
+    <br>
+    <strong>What is the chief difference between the –v and –x option s to set?
+    </strong> <br>
+    <strong>–v option </strong>echoes each command before arguments and
+    variables have been substituted for; <br>
+    <strong>–x option</strong> echoes the commands after substitution has taken
+    place. <br>
+    <br>
+    <strong>What is Kernel? </strong><br>
+    Kernel is the UNIX operating system. It is the master program that controls
+    the computer’s resources, allotting them to different users and to different
+    tasks. However, the kernel doesn’t deal directly with a user. Instead, it
+    starts up a separate, interactive program, called a shell, for each user
+    when he/she logs on. <br>
+    <br>
+    <strong>What is Shell? </strong><br>
+    A shell acts as an interface between the user and the system. As a command
+    interpreter, the shell takes commands and sets them up for execution. <br>
+    <br>
+    <strong>What are the key features of the Korn Shell? <br>
+    </strong>
+    <ul>
+      <li>history mechanism with built-in editor that simulates emacs or vi </li>
+      <li>built-in integer arithmetic </li>
+      <li>string manipulation capabilities </li>
+      <li>command aliasing </li>
+      <li>arrays </li>
+      <li>job control </li>
+    </ul>
+    <br>
+    <strong>What are some common shells and what are their indicators? </strong><br>
+    <ul>
+      <li>sh – Bourne shell </li>
+      <li>csh – C SHell </li>
+      <li>bash – Bourne Again Shell </li>
+      <li>tcsh – enhanced C Shell </li>
+      <li>zsh – Z SHell </li>
+      <li>ksh – Korn SHell </li>
+    </ul>
+    <strong>Differentiate multiuser from multitask.</strong> <br>
+    Multiuser means that more than one person can use the computer at the same
+    time. Multitask means that even a single user can have the computer work on
+    more than one task or program at the same time. <br>
+    <br>
+    <strong>What is command substitution? </strong> <br>
+    Command substitution is one of the steps being performed every time commands
+    are processed by the shell. Commands that are enclosed in backquotes are
+    executed by the shell. This will then replace the standard output of the
+    command and displayed on the command line. <br>
+    <br>
+    <strong>What is a directory?</strong> <br>
+    Every file is assigned to a directory. A directory is a specialized form of
+    file that maintains a list of all files in it. <br>
+    <br>
+    <strong>What is inode? </strong><br>
+    An inode is an entry created on a section of the disk set aside for a file
+    system. The inode contains nearly all there is to know about a file, which
+    includes the location on the disk where the <strong>file starts, the size
+      of the file, when the file was last used, when the file was last changed,
+      what the various read, write and execute permissions</strong> are, who
+    owns the file, and other information. <br>
+    <br>
+    <strong>You have a file called tonky in the directory honky. Later you add
+      new material to tonky. What changes take place in the directory, inode,
+      and file?</strong> <br>
+    The directory entry is unchanged, since the name and inode number remain
+    unchanged. In the inode file, the file size, time of last access, and time
+    of last modification are updated. In the file itself, the new material is
+    added. <br>
+    <br>
+    <strong>Describe file systems in UNIX</strong> <br>
+    Understanding file systems in UNIX has to do with knowing how files and
+    inodes are stored on a system. What happens is that a disk or portion of a
+    disk is set aside to store files and the inode entries. The entire
+    functional unit is referred to as a file system. <br>
+    <br>
+    <strong>Differentiate relative path from absolute path.</strong> <br>
+    Relative path refers to the path relative to the current path. <br>
+    Absolute path, on the other hand, refers to the exact path as referenced
+    from the root directory. <br>
+    <br>
+    <strong>Explain the importance of directories in a UNIX system</strong> <br>
+    Files in a directory can actually be a directory itself; it would be called
+    a subdirectory of the original. This capability makes it possible to develop
+    a tree-like structure of directories and files, which is crucial in
+    maintaining an organizational scheme. <br>
+    <br>
+    <strong>Briefly describe the Shell’s responsibilities</strong> <br>
+    <ul>
+      <li>program execution </li>
+      <li>variable and file name substitution </li>
+      <li>I/O redirection </li>
+      <li>pipeline hookup </li>
+      <li>environment control </li>
+      <li>interpreted programming language </li>
+    </ul>
+    <br>
+    <strong>What are shell variables? </strong><br>
+    Shell variables are a combination of a name ( identifier), and an assigned
+    value, which exist within the shell. These variables may have default
+    values, or whose values can be manually set using the appropriate assignment
+    command. Examples of shell variable are PATH, TERM and HOME. <br>
+    <br>
+    <strong>What are the differences among a system call, a library function,
+      and a UNIX command?</strong> <br>
+    <ul>
+      <li>A system call is part of the programming for the kernel. </li>
+      <li>A library function is a program that is not part of the kernel but
+        which is available to users of the system. </li>
+      <li>UNIX commands, however, are stand-alone programs; they may incorporate
+        both system calls and library functions in their programming. </li>
+    </ul>
+    <br>
+    <strong>What is Bash Shell?</strong> <br>
+    It is a free shell designed to work on the UNIX system. Being the default
+    shell for most UNIX-based systems, it combines features that are available
+    both in the C and Korn Shell. <br>
+    <br>
+    <strong>Enumerate some of the most commonly used network commands in UNIX</strong>
+    <br>
+    <ul>
+      <li>telnet – used for remote login </li>
+      <li>ping – an echo request for testing connectivity </li>
+      <li>su – user switching command </li>
+      <li>ftp – file transfer protocol used for copying files </li>
+      <li>finger – information gathering command </li>
+    </ul>
+    <br>
+    <strong>Differentiate cmp command from diff command.</strong> <br>
+    The <strong>cmp command</strong> is used mainly to compare two files byte
+    by byte, after which the first encountered mismatch is shown. <br>
+    On the other hand, the <strong>diff command</strong> is used to indicate
+    the changes that is to be made in order to make the two files identical to
+    each other. <br>
+    <br>
+    <strong>What is the use of -l when listing a directory?</strong> <br>
+    <strong>-l, </strong>which is normally used in listing command like ls, is
+    used to show files in a long format, one file per line. Long format refers
+    to additional information that is associated with the file, such as
+    ownership, permissions, data and filesize. <br>
+    <br>
+    <strong>What is piping? </strong><br>
+    Piping, represented by the pipe character “|”, is used to combine two or
+    more commands together. The output of the first command serves as input the
+    next command, and so on. <br>
+    <br>
+    <strong>What is a superuser?</strong> <br>
+    A superuser is a special type user who has open access to all files and
+    commands on a system. Note that the superuser’s login is usually root, and
+    is protected by a so-called root password. <br>
+    <br>
+    <strong>How do you determine and set the path in UNIX?</strong> <br>
+    Each time you enter a command, a variable named PATH or path will define in
+    which directory the shell will search for that command. In cases wherein an
+    error message was returned, the reason maybe that the command was not in
+    your path, or that the command itself does not exist. You can also manually
+    set the path using the “set path = [directory path]” command. <br>
+    <br>
+    <strong>Is it possible to see information about a process while it is being
+      executed? </strong> <br>
+    Every process is uniquely identified by a process identifier. It is possible
+    to view details and status regarding a process by using the ps command. <br>
+    <br>
+    <strong>What is the standard convention being followed when naming files in
+      UNIX? </strong> <br>
+    One important rule when naming files is that characters that have special
+    meaning are not allowed, such as * / &amp; and %. A directory, being a
+    special type of file, follows the same naming convention as that of files.
+    Letters and numbers are used, along with characters like underscore and dot
+    characters. <br>
+    <br>
+    <strong>Why is it that it is not advisable to use root as the default login?
+    </strong><br>
+    The root account is very important, and with abusive usage, can easily lead
+    to system damage. That’s because safeguards that normally apply to user
+    accounts are not applicable to the root account. <br>
+    <br>
+    <strong>What is the use of the tee command?</strong> <br>
+    The tee command does two things: one is to get data from the standard input
+    and send it to standard output; the second is that it redirects a copy of
+    that input data into a file that was specified. <br>
+    <br>
+    <strong>Differentiate cat command from more command.</strong> <br>
+    When using the cat command to display file contents, large data that does
+    not fit on the screen would scroll off without pausing, therefore making it
+    difficult to view. On the other hand, using the more command is more
+    appropriate in such cases because it will display file contents one screen
+    page at a time. <br>
+    <br>
+    <strong>What is parsing?</strong> <br>
+    Parsing is the process of breaking up of a command line into words. This is
+    made possible by using delimiters and spaces. In the event that tabs or
+    multiple spaces are part of the command, these are eventually replaced by a
+    single space. <br>
+    <br>
+    <strong>What is pid? </strong><br>
+    Pid is short for Process ID. It is used primarily to identify every process
+    that runs on the UNIX system, whether it runs on the foreground or runs at
+    the background. Every pid is considered unique. <br>
+    <br>
+    <strong>How does the system know where one command ends and another begins?</strong>
+    <br>
+    Normally, the newline character, which is generated by the ENTER or RETURN
+    key, acts as the signpost. However, the semicolon and the ampersand
+    characters can also serve as command terminators. <br>
+    <br>
+    <strong>What is wild-card interpretation? </strong><br>
+    When a command line contains wild-card characters such as <strong>‘*’ or
+      ‘?’</strong>, these are replaced by the shell with a sorted list of files
+    whose pattern matches the input command. Wild-card characters are used to
+    setup a list of files for processing, instead of having it specified one at
+    a time. <br>
+    <br>
+    <strong>What is the output of this command? $who | sort –logfile &gt;
+      newfile <br>
+    </strong>In this command, the output from the command “who” becomes the
+    input to the “sort” command. At the same time, “sort” opens logfile,
+    arranges it together with the output from the command “who”, and places the
+    final sorted output to the file newfile. <br>
+    <br>
+    <strong>How do you switch from any user type to a super user type?</strong>
+    <br>
+    In order to switch from any user type to a superuser, you use the su
+    command. However, you will be asked to key in the correct superuser password
+    before full access privileges are granted to you. <br>
+    <br>
+    <strong>What would be the effect of changing the value of PATH to:
+      .:/usr/della/bin: /bin: /usr/bin </strong><br>
+    This would cause the shell to look in the /usr/della/bin directory after
+    looking in the current directory and before looking in the /bin directory
+    when searching for a command file. <br>
+    <br>
+    <strong>Write a command that will display files in the current directory, in
+      a colored, long format. </strong><br>
+    <p class="codeblock"> Answer: ls -l –color </p>
+    <br>
+    <strong>Write a command that will find all text files in a directory such
+      that it does not contain the word “amazing” in any form (that is, it must
+      include the words Amazing, AMAZING, or aMAZINg)</strong> <br>
+    <p class="codeblock"> Answer: grep –vi amazing *.txt </p>
+    <br>
+    <strong>Write a command that will output the sorted contents of a file named
+      IN.TXT and place the output in another file named OUT.TXT, while at the
+      same time excluding duplicate entries. </strong><br>
+    <p class="codeblock"> Answer: sort IN.TXT | uniq &gt; OUT.TXT </p>
+    <br>
+    <strong>Write a command that will allow a UNIX system to shut down in 15
+      minutes, after which it will perform a reboot. </strong><br>
+    <p class="codeblock"> Answer:/sbin/shutdown –r +15 </p>
+    <br>
+    <strong>What command will change your prompt to MYPROMPT: ?</strong> <br>
+    To change a prompt, we use the PS1 command, such as this: <br>
+    <p class="codeblock">PS1 = ‘MYPROMPT:’ </p>
+    <br>
+    <strong>What does this command do?</strong> <br>
+    cat food 1 &gt; kitty Answer: it redirects the output of cat food into the
+    file kitty; the command is the same as: cat food &gt; kitty <br>
+    <br>
+    <strong>What is wrong with this interactive shell script? <br>
+      echo What month is this? <br>
+      read $month <br>
+      echo $month is as good a month as any. <br>
+    </strong>Answer: Initially, the question mark should be escaped (\?) so that
+    it is not interpreted as a shell metacharacter. Second, it should be read
+    month, not read $month. <br>
+    <br>
+    <strong>Write a shell script that requests the user’s age and then echoes
+      it, along with some suitable comment. </strong><br>
+    Answer:
+    <p class="codeblock"> echo Hello! What\’s your age\? <br>
+      read age <br>
+      echo $age! I\’ll be obsolete by that age! <br>
+    </p>
+    <strong>Write a script that prints out date information in this order: time,
+      day of week, day number, month, year (sample output: 17:34:51 PDT Sun 12
+      Feb 2012)</strong> <br>
+    Answer:
+    <p class="codeblock"> set ‘date’ <br>
+      echo $4 $5 $1 $3 $2 $6 <br>
+    </p>
+    <strong>Write a script that will show the following as output: <br>
+      Give me a U! <br>
+      U! <br>
+      Give ma a N! <br>
+      N! <br>
+      Give me a I! <br>
+      I! <br>
+      Give me a X! <br>
+      X! </strong><br>
+    Answer:
+    <p class="codeblock"> for i in U N I X <br>
+      <br>
+      echo Give me a $i! <br>
+      echo $i! <br>
+      do <br>
+      done</p>
+  </body>
+</html>

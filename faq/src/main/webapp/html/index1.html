@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <title>load demo</title>
+    <style type="text/css"><!--
+    body{
+        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
+        font-size : 20px;
+        width : 1080px;
+    }
+-->
+	</style>
+    <script src="../js/jquery-2.1.4.js"></script>
+  </head>
+  <body>
+    <p>&nbsp;</p>
+    <table style="width: 1087px; height: 247px;" border="1">
+      <tbody>
+        <tr>
+          <td>&nbsp;&nbsp;&nbsp;&nbsp; FAQ </td>
+          <td>&nbsp;&nbsp; Main Documents</td>
+        </tr>
+        <tr>
+          <td style="width: 381.55px;vertical-align: text-top;">
+            <ul>
+              <li><a href="javacore/1faq.html">FAQ 1</a></li>
+              <li><a href="javacore/2faq.html">FAQ 2</a></li>
+            </ul>
+          </td>
+          <td style="width: 682.45px;vertical-align: text-top;">
+            <ul>
+              <li><a href="javacore/Collections.html">Collections</a></li>
+              <li><a href="javacore/CountDownLatch.html">CountDownLatch</a></li>
+              <li><a href="javacore/CyclicBarrier.html">Cyclic Barrier</a></li>
+              <li><a href="javacore/equalsAndHashCode.html">Equals &amp;
+                  HashCode</a></li>
+              <li><a href="javacore/garbageCollector.html">Garbage Collection
+                  &amp; Heap</a></li>
+              <li><a href="javacore/immutableClass.html">Immutable Class</a></li>
+              <li><a href="javacore/stringLiteral.html">StringLiteral</a></li>
+            </ul>
+            <br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><a href="http://tutorials.jenkov.com/java-concurrency/index.html">http://tutorials.jenkov.com/java-concurrency/index.html</a>
+    
+    <p><a id="testLoad" onclick="testClick()" href="">Load Page</a></p>
+    <p><a href="javacore/stringLiteral.html">StringLiteral</a></p>
+    <p><a href="javacore/sample.html">sample.html</a></p>
+    
+      <!--
+<table border="1" width="100%">	<tbody>		<tr>			<td colspan="2">Header Header Header Header Header Header Header Header Header Header Header Header Header Header</td>		</tr>		<tr>			<td width="20%">			<div id="leftPane">&nbsp;</div>			</td>			<td width="80%">main info</td>		</tr>		<tr>			<td colspan="2">footer</td>		</tr>	</tbody></table>-->
+     <div id="pageContent"> </div>
+     
+      <script>
+		$(document).ready(function(){
+			$('a').click(function() {
+				$('#pageContent').load($(this).attr('href'), function( response, status, xhr ) {
+					  if ( status == "success" ) {
+						  alert("successfully done");
+						  setImgSrc();
+					  }
+				});
+				var urlPath = $(this).attr('href');
+				alert(urlPath.substring(0, urlPath.lastIndexOf("/")+1))
+				//$('#pageContent').$('img').attr('src','second.jpg');
+				return false;
+			});
+			$("img").load(function(){
+			    alert("Image loaded.");
+			});
+			//alert("window.location.host"+window.location.host);
+			$('img').load(function() {  
+				 alert("load image inside doc");
+			});
+// 				var loc = this.src;
+// 				  loc = loc.substring(0, loc.lastIndexOf("/img/"));
+// 				  alert("loc : "+loc);   
+// 			});   
+		});      
+	  
+		
+	  function setImgSrc(){
+		  alert("inside method ")
+		   $('img').each(function() {
+			   var urlPath =  "http://"+window.location.host +"/faq"+$(this).attr('data-src');
+			   alert($(this).attr('data-src'));
+			   alert("urlPath : "+ urlPath) 
+			   $(this).attr('src',urlPath );
+			});
+	  }	
+	  
+    </script>
+    
+  </body>
+</html>

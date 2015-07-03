@@ -1,0 +1,19 @@
+{"urlData":
+  [{
+  "categoryName" : "Java Core",
+  "links" : [
+    {"displayName" : "FAQ 1",    "displayUrl" :"javacore/1faq.html"},
+    {"displayName" : "FAQ 2",    "displayUrl" :"javacore/2faq.html"},
+    
+    {"displayName" : "Sample",    "displayUrl" :"javacore/sample.html"},
+    {"displayName" : "Collections",    "displayUrl" :"javacore/Collections.html"},
+    {"displayName" : "CountDownLatch",    "displayUrl" :"javacore/CountDownLatch.html"},
+    {"displayName" : "Cyclic Barrier",    "displayUrl" :"javacore/CyclicBarrier.html"}
+  ]},{
+  "categoryName" : "Other",
+  "links" : [
+  	{"displayName" : "Unix",    "displayUrl" :"other/unix.html"}
+  
+  ]}
+  ]
+}
