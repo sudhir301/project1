@@ -30,14 +30,11 @@
 
 	<script>
 		$(document).ready(function(){
-			console.log("Step 111");
 			 $.getJSON( "lefttab.json", function(data, status, xhr ) {
 				console.log("status :" +status);
-				console.log("Step 12222");
 			 	loadLeftPane(data);
 			 }).fail(function( jqxhr, textStatus, error ) {
-				var err = textStatus + ", " + error;
-				console.log( "Request Failed: " + err );
+				console.log( "Request Failed: " + textStatus + ", " + error );
 			 });
 		});      
 	  
@@ -62,12 +59,12 @@
 		$('#pageContent').load(path1, function( response, status, xhr ) {
 			if ( status == "success" ) {
 				//alert("successfully done");
+				console.log( path1 + " File Loaded Successfully");
 				setImgSrc();
+			} else if ( status == "error" ) {
+				console.log(path1 + "File Load Failed: " + status + ", " + xhr.statusText );
 			}
-		}).fail(function( jqxhr, textStatus, error ) {
-			var err = textStatus + ", " + error;
-			console.log( "Load the file : " + err );
-		 }); 
+		}); 
 	  }
 	  
 	  function setImgSrc(){

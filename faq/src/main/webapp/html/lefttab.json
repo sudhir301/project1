@@ -8,11 +8,18 @@
     {"displayName" : "Sample",    "displayUrl" :"javacore/sample.html"},
     {"displayName" : "Collections",    "displayUrl" :"javacore/Collections.html"},
     {"displayName" : "CountDownLatch",    "displayUrl" :"javacore/CountDownLatch.html"},
-    {"displayName" : "Cyclic Barrier",    "displayUrl" :"javacore/CyclicBarrier.html"}
+    {"displayName" : "Cyclic Barrier",    "displayUrl" :"javacore/CyclicBarrier.html"},
+    {"displayName" : "Concurrent Package",    "displayUrl" :"javacore/ConcurrentPackage.html"},
+    {"displayName" : "Equal & HashCode",    "displayUrl" :"javacore/equalsAndHashCode.html"},
+    {"displayName" : "Fail Fast Fail Safe",    "displayUrl" :"javacore/FailFastFailSafe.html"},
+    {"displayName" : "Garbage Collection",    "displayUrl" :"javacore/garbageCollector.html"},
+    {"displayName" : "Immutable class",    "displayUrl" :"javacore/immutableClass.html"},
+    {"displayName" : "String Literal",    "displayUrl" :"javacore/stringLiteral.html"}
   ]},{
   "categoryName" : "Other",
   "links" : [
-  	{"displayName" : "Unix",    "displayUrl" :"other/unix.html"}
+  	{"displayName" : "Unix",    "displayUrl" :"other/unix.html"},
+  	{"displayName" : "Agile",    "displayUrl" :"other/agile.html"}
   
   ]}
   ]
