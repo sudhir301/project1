@@ -10,24 +10,25 @@
 	<table width="100%" height="1000">
 		<tbody>
 			<tr>
-				<td colspan="3" align="center" height="10px"><H1>Tool of Question Bank</H1><hr style="background: rgb(0, 0, 0);" /></td>
+				<td colspan="2" align="center" height="10px"><H1>Tool of Question Bank</H1></td>
 			</tr>
 			<tr>
 				<td width="20%" style="vertical-align: text-top;">
 					<div id="leftPane">&nbsp;</div>
 				</td>
-				<td width="2px" style="background: rgb(0, 0, 0);"></td>
 				<td width="80%" style="padding-left:20px">
 					<div id="pageContent"></div>
 				</td>
 			</tr>
 			<tr>
-				<td colspan="3" style="text-align:right;vertical-align: bottom; height:10px;"></td>
+				<td colspan="2" style="text-align:right;vertical-align: bottom; height:10px;"></td>
 			</tr>
 		</tbody>
 	</table>
 
-
+<div class="sidebar">
+  <a href="#"> TOP </a>
+</div>
 	<script>
 		$(document).ready(function(){
 			 $.getJSON( "lefttab.json", function(data, status, xhr ) {
@@ -55,10 +56,8 @@
 	 }
 	 
 	 function loadOnclick(path1){
-		//alert("Test 45893499 : " + path1 );
-		$('#pageContent').load(path1, function( response, status, xhr ) {
+		$('#pageContent').load(path1, 'f' + (Math.random()*1000000), function( response, status, xhr ) {
 			if ( status == "success" ) {
-				//alert("successfully done");
 				console.log( path1 + " File Loaded Successfully");
 				setImgSrc();
 			} else if ( status == "error" ) {
@@ -68,15 +67,16 @@
 	  }
 	  
 	  function setImgSrc(){
-		  //alert("inside method ")
 		   $('img').each(function() {
-			   var urlPath =  "http://"+window.location.host +"/faq"+$(this).attr('data-src');
-			   //alert($(this).attr('data-src'));
-			   //alert("urlPath : "+ urlPath) 
+			   var temp = $(this).attr('src');
+			   var urlPath =  "http://"+window.location.host +"/faq"+temp.substring(temp.indexOf(/img/));
+			   var temp = $(this).attr('src');
+			   console.log("src : " + temp + "     urlPath : "+ temp.substring(temp.indexOf(/img/))); 
+			   //console.log("data-src : " +  $(this).attr('data-src') + "     urlPath : "+ urlPath); 
 			   $(this).attr('src',urlPath );
 			});
 	  }	
-	  
+	    
     </script>
     
   </body>

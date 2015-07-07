@@ -3,15 +3,6 @@
   <head>
     <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
     <title>FAQ 2</title>
-    <style type="text/css"><!--
-    body{
-        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
-        font-size : 20px;
-        width : 1080px;
-        line-height: 1.5;        
-    }
--->
-	</style>
   </head>
   <body>
     <p style="text-align: center;"><strong>MULTITHREADING FAQ's</strong></p>
@@ -302,6 +293,22 @@ http://javarevisited.blogspot.com/2011/02/how-to-implement-thread-in-java.html#i
       CyclicBarrier even after barrier is broken.&nbsp; See this answer for few
       more points and sample code example. <a href="CyclicBarrier.html">CyclicBarrier</a>
       and <a href="CountDownLatch.html">CountDownLatch</a></p>
+    <p><br>
+      <strong>What is difference between Executor.submit() and
+        Executer.execute() method ?</strong></p>
+    <p>former returns an object of Future which can be used to find result from
+      worker thread</p>
+    <p>By the way @vinit Saini suggested a very good point related to this core
+      Java interview question<br>
+      There is a difference when looking at exception handling. If your tasks
+      throws an exception and if it was submitted with execute this exception
+      will go to the uncaught exception handler (when you don't have provided
+      one explicitly, the default one will just print the stack trace to
+      System.err). If you submitted the task with submit any thrown exception,
+      checked exception or not, is then part of the task's return status. For a
+      task that was submitted with submit and that terminates with an exception,
+      the Future.get() will re-throw this exception, wrapped in an
+      ExecutionException.</p>
     <p><br>
       <strong>What is Java Memory model?</strong><br>
       Java Memory model is set of rules and guidelines which allows Java

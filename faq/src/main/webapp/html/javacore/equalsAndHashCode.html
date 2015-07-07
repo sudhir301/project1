@@ -1,267 +1,397 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="ISO-8859-1" />
-	<title>Equals and HashCode</title>
-    <style type="text/css"><!--
-    body{
-        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
-        font-size : 20px;
-        width : 1080px;
-        line-height: 1.5;
-    }
--->
-	</style>	
-</head>
-<body>
-<p><strong>Overriding equals() and hashCode() method in Java and Hibernate</strong></p>
-
-<p><strong>Override equals and hashCode in Java</strong></p>
-
-<ul>
-	<li>Equals and hashCode in Java are two fundamental method which is declared in Object class and part or core Java library.</li>
-	<li>equals() method is used to <strong>compare Objects for equality </strong>while hashCode is used to <strong>generate an integer code corresponding to that object</strong>.</li>
-	<li>equals and hashCode has used extensively in Java core library like they are used while inserting and retrieving Object in HashMap,&nbsp;</li>
-	<li>equals method is also used to avoid duplicates on HashSet and other Set implementation and every other place where you need to compare Objects.</li>
-	<li>Default implementation of equals() class provided by java.lang.Object <strong>compares memory location and only return true if two reference variable are pointing to same memory </strong>location i.e. essentially they are same object.</li>
-	<li>Java recommends to override equals and hashCode method if equality is going to be define by logical way or via some business logic and many classes in Java standard library does override it
-	<ul>
-		<li>e.g. String overrides equals,&nbsp; whose implementation of equals() method return true if content of two String objects are exactly same.</li>
-		<li>Integer wrapper class overrides equals to perform numerical comparison etc.</li>
-	</ul>
-	</li>
-</ul>
-
-<p>Since HashMap and Hashtable in Java relies on equals() and hashCode() method for comparing keys and values, Java provides following rules to override equals method Java. As per following rule equals method in Java should be:</p>
-
-<ol>
-	<li><strong>Reflexive </strong>: Object must be equal to itself.</li>
-	<li><strong>Symmetric</strong> : if <strong>a.equals(b) is true then b.equals(a)</strong> must be true.</li>
-	<li><strong>Transitive</strong> : if <strong>a.equals(b) is true and b.equals(c) is true then c.equals(a)</strong> must be true.</li>
-	<li><strong>Consistent</strong> : multiple invocation of equals() method must result same value until any of properties are modified. So if two objects are equals in Java they will remain equals until any of there property is modified.</li>
-	<li><strong>Null comparison</strong> : comparing any object to null must be false and should not result in NullPointerException.
-	<ul>
-		<li>For example <strong>a.equals(null)</strong> must be false, passing unknown object, which could be null,&nbsp; to equals in Java is actually a Java coding best practice to avoid NullPointerException in Java.</li>
-	</ul>
-	</li>
-</ol>
-
-<p>&nbsp;</p>
-
-<p><strong>Equals and hashCode contract in Java</strong></p>
-
-<p>equals method in Java must follow its contract with hashcode method in Java as stated below.</p>
-
-<ol>
-	<li>If two objects are equal by equals() method then there hashcode must be same.</li>
-	<li>If two objects are not equal by equals() method then there hashcode could be same or different.</li>
-</ol>
-
-<p>So this was the basic theory about equals method in Java now we are going to discuss the approach on how to override equals() method, yes I know you all know this stuff :) but I have seen some of equals() code which can be improved by following correct approach. For illustration purpose we will see an example of Person class and discuss How to write equals() method in Java for that class.</p>
-
-<p><strong>Steps to Override equals method in Java</strong></p>
-
-<p>Here is my approach for overriding equals method in Java. This is based on standard approach most of Java programmer follows while writing equals method in Java.</p>
-
-<p style="margin-left: 40px;">1) Do <strong>this </strong>check -- if yes then return true.</p>
-
-<p style="margin-left: 40px;">2) Do <strong>null </strong>check -- if yes then return false.</p>
-
-<p style="margin-left: 40px;">3) Do the <strong>instanceof </strong>check,&nbsp; if instanceof return false than return false from equals in Java , after some research I found that instead of instanceof we can use getClass() method for type identification because instanceof check returns true for subclass also, so its not strictly equals comparison until required by business logic. But instanceof check is fine if your class is immutable and no one is going to sub class it. For example we can replace instanceof check by below code</p>
-
-<p style="margin-left: 40px;">if((obj == null) || (obj.getClass() != this.getClass())) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return false;<br />
-}</p>
-
-<p style="margin-left: 40px;">4) Type cast the object; note the sequence instanceof check must be prior to casting object.</p>
-
-<p style="margin-left: 40px;">5) Compare individual attribute starting with numeric attribute because comparing numeric attribute is fast and use short circuit operator for combining checks.&nbsp; If first field does not match, don&#39;t try to match rest of attribute and return false. It&rsquo;s also worth to remember doing null check on individual attribute before calling equals() method on them recursively to avoid NullPointerException during equals check in Java.</p>
-
-<p><strong>Code Example of overriding equals method in Java</strong></p>
-
-<p>equals and hashCode method in Java and Hibernate example tutorialLet&rsquo;s see a code example based on my approach of overriding equals method in Java as discussed in above paragraph and hashCode() method is generated by Eclipse IDE, see my post&nbsp; 5 tips to override hashcode in Java for detailed example and explanation of the right way to implement hashcode method.</p>
-
-<p style="margin-left: 40px;">/**<br />
-&nbsp;* Person class with equals and hashcode implementation in Java<br />
-&nbsp;* @author Javin Paul<br />
-&nbsp;*/<br />
-public class Person {<br />
-&nbsp;&nbsp;&nbsp; private int id;<br />
-&nbsp;&nbsp;&nbsp; private String firstName;<br />
-&nbsp;&nbsp;&nbsp; private String lastName; &nbsp;&nbsp;&nbsp; public int getId() { return id; }<br />
-&nbsp;&nbsp;&nbsp; public void setId(int id) { this.id = id;} &nbsp;&nbsp;&nbsp; public String getFirstName() { return firstName; }<br />
-&nbsp;&nbsp;&nbsp; public void setFirstName(String firstName) { this.firstName = firstName; } &nbsp;&nbsp;&nbsp; public String getLastName() { return lastName; }<br />
-&nbsp;&nbsp;&nbsp; public void setLastName(String lastName) { this.lastName = lastName; } &nbsp;&nbsp;&nbsp; @Override<br />
-&nbsp;&nbsp;&nbsp;<strong> public boolean equals(Object obj) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (obj == this) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return true;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (obj == null || obj.getClass() != this.getClass()) {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return false;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Person guest = (Person) obj;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return id == guest.id<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp;&amp; (firstName == guest.firstName<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; || (firstName != null &amp;&amp; firstName.equals(guest.getFirstName())))<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp;&amp; (lastName == guest.lastName<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; || (lastName != null &amp;&amp; lastName .equals(guest.getLastName())));<br />
-&nbsp;&nbsp;&nbsp; }</strong><br />
-&nbsp;&nbsp;&nbsp;<br />
-&nbsp;&nbsp;&nbsp; @Override<br />
-&nbsp;&nbsp;&nbsp;<strong> public int hashCode() {<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; final int prime = 31;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int result = 1;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result = prime * result<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + ((firstName == null) ? 0 : firstName.hashCode());<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result = prime * result + id;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result = prime * result<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; + ((lastName == null) ? 0 : lastName.hashCode());<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return result;<br />
-&nbsp;&nbsp;&nbsp; }</strong><br />
-&nbsp;&nbsp;&nbsp;<br />
-}</p>
-
-<p>If you look above method we are</p>
-
-<ul>
-	<li>first checking for &quot;this&quot; check which is fastest available check for equals method then</li>
-	<li>we are verifying whether object is null or not and object is of same type or not.</li>
-	<li>only after verifying type of object we are casting it into desired object to avoid any ClassCastException in Java.</li>
-	<li>Also while comparing individual attribute we are comparing numeric attribute first using short circuit operator to avoid further calculation if its already unequal and doing null check on member attribute to avoid NullPointerException.</li>
-</ul>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>Common Errors while overriding equals in Java</strong></p>
-
-<p>Though equals() and hashcode() method are defined in Object class along with wait, notify and notifyAll,&nbsp; and one of fundamental part of Java programming I have seen many programmers making mistake while writing equals() method in Java. I recommend all Java programmer who has just started programming to write couple of equals and hashcode method for there domain or value object to get feel of it. Here I am listing some of common mistakes I have observed on various equals method in Java, if you like to learn more about common mistakes in Java programming then see my post Don&rsquo;t use float and double for monetary calculation and Mixing static and non static synchronized method. Now let&rsquo;s see common mistakes by Java programmers while overriding equals in Java :</p>
-
-<p>1) Instead of overriding equals() method programmer overloaded it.<br />
-This is the most common error I have seen while overriding equals method in Java. Syntax of equals method defined in Object class is public boolean equals(Object obj) but many people unintentionally overloads equals method in Java by writing public boolean equals(Person obj), instead of using Object as argument they use there class name. This error is very hard to detect because of static binding. So if you call this method in your class object it will not only compile but also execute correctly but if you try to put your object in collection e.g. ArrayList and call contains() method which is based on equals() method in Java it will not able to detect your object. So beware of it. This question is also a frequently asked question in Java interviews as part of Overloading vs Overriding in Java as how do you prevent this from happening ? Thankfully along-with Generics, Enum, autoboxing and varargs Java 5 also introduces @Override annotation which can be used to tell compiler that you are overriding a method and than compiler will be able to detect this error during compile time. Consistently using @Override annotation is also a best practice in Java.</p>
-
-<p>2) Second mistake I have seen while overriding equals() method is not doing null check for member variables which ultimately results in NullPointerException in Java during equals() invocation. For example in above code correct way of calling equals() method of member variable is after doing null check as shown below:</p>
-
-<p>firstname == guest.firstname || (firstname != null &amp;amp;&amp;amp; firstname.equals(guest.firstname)));</p>
-
-<p>3) Third common mistake is not overriding hashCode method in Java and only overriding equals() method. You must have to override both equals() and hashCode() method in Java , otherwise your value object will not be able to use as key object in HashMap because working of HashMap is based on equals() and hashCode to read more see , How HashMap works in Java.</p>
-
-<p>4) Last common mistake programmer make while overriding equals() in Java is not keeping equals() and compareTo() method consistent which is a non formal requirement in order to obey contract of Set to avoid duplicates. SortedSet implementation like TreeSet uses compareTo to compare two objects like String and if compareTo() and equals() will not be consistent than TreeSet will allow duplicates which will break Set contract of not having duplicates. To learn more about this issue see my post Things to remember while overriding compareTo in Java</p>
-
-<p><strong>Writing JUnit tests for equals method in Java</strong></p>
-
-<p>Its good coding practice to write JUnit test cases to test your equals and hashCode method. Here is my approach for writing JUnit test case for equals method in Java. I will write test cases to check equals behaviour, contract of equals and hasCode method and properties of equals method in Java on different circumstances. You can also JUnit4 annotation to write JUnit test cases, than you don&rsquo;t need to use test prefix on test method, just use @Test annotations.</p>
-
-<ul>
-	<li>testReflexive() this method will test reflexive nature of equals() method in Java.</li>
-	<li>testSymmeteric() this method will verify symmetric nature of equals() in Java.</li>
-	<li>testNull() this method will verify null comparison and will pass if equals method returns false.</li>
-	<li>testConsistent() should verify consistent nature of equals method in Java.</li>
-	<li>testNotEquals() should verify if two object which are not supposed to equals is actually not equal, having negative test cases in test suite is mandatory.</li>
-	<li>testHashCode() will verify that if two objects are equal by equals() method in Java then there hashcode must be same. This is an important test if you are thinking to use this object as key in HashMap or Hashtable</li>
-</ul>
-
-<p>&nbsp;</p>
-
-<p>5 Tips on writing equals method in Java</p>
-
-<p>Here are some tips to implement equals and hashCode method in Java, this will help you to do it correctly and with ease:</p>
-
-<p>1) Most of the IDE like NetBeans, Eclipse and IntelliJ IDEA provides support to generate equals() and hashcode() method. In Eclipse do the right click-&gt; source -&gt; generate hashCode() and equals().</p>
-
-<p><br />
-2) If your domain class has any unique business key then just comparing that field in equals method would be enough instead of comparing all the fields e.g. in case of our example if &quot;id&quot; is unique for every Person and by just comparing id we can identify whether two Person are equal or not.</p>
-
-<p><br />
-3) While overriding hashCode in Java makes sure you use all fields which have been used in equals method in Java.</p>
-
-<p><br />
-4) String and Wrapper classes like Integer, Float and Double override equals method but StringBuffer doesn&rsquo;t override it.</p>
-
-<p><br />
-5) Whenever possible try to make your fields immutable by using final variables in Java, equals method based on immutable fields are much secure than on mutable fields.</p>
-
-<p><br />
-6) Don&#39;t use instanceof check in equals method, as it could break contract of equals() method in sub-class, results in non-symmetric equals, because instanceof return true for child class as well. For example, if you compare two objects Parent and Child from same type-hierarchy; Parent.equals(child) will return true, because child instanceof Parent is true, but Child.equals(parent) will return false, because Parent instanceof Child is false. This means equals() is not following symmetric contract, which states if a.equals(b) == true than b.equals(a) == true, as shown below :</p>
-
-<p>public class Parent {<br />
-}</p>
-
-<p>public class Child extends Parent {<br />
-}</p>
-
-<p>public class InstanceOfCheck {</p>
-
-<p>&nbsp;&nbsp;&nbsp; public static void main(String args[]) {</p>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Parent p = new Parent();<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Child c = new Child();</p>
-
-<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;child instanceof Parent &quot; + (c instanceof Parent));<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println(&quot;parent instanceof Child &quot; + (p instanceof Child));</p>
-
-<p>&nbsp;&nbsp;&nbsp; }</p>
-
-<p>}</p>
-
-<p>Output :<br />
-child instanceof Parent true<br />
-parent instanceof Child false</p>
-
-<p>Alternatively, you can mark equals as final method to prevent it from being overridden.</p>
-
-<p><br />
-7) While comparing String object in Java, prefer equals() than == operator.</p>
-
-<p><br />
-8) Use IDE or Apache commons EqualsBuilder and HashCodeBuilder utility classes to automatically implement equals() and hashcode() method in Java.</p>
-
-<p><br />
-9) Two object which is logically equal but loaded from different ClassLoader cannot be equals. Remember that getClass() check, it will return false if class loader is different.</p>
-
-<p><br />
-10) Use @Override annotation on hashcode() as well, as it also prevents subtle mistakes over return type. e.g. return type of hashcode() method is int, but many times programmers mistakenly put long.</p>
-
-<p><br />
-11) One&nbsp; example, where equals method is not consistent with compareTo is java.math.BigDecimal class. If you compare two BigDecimal object e.g. 120.00 and 120.000, equals method will return false, while compareTo will return zero. Both are inconsistent, because equals take both scale and value in consideration, while compareTo method only consider values.</p>
-
-<p><br />
-12) From Java 7 you can also use a new utility class called java.util.Objects for null safe equality check and calculating hash code. You can replace our null-safe code for check equality :</p>
-
-<p>(name == guest.name || (name != null &amp;amp;&amp;amp; name.equals(guest.getName())))</p>
-
-<p>to much concise</p>
-
-<p>Objects.equals(name, guest.getName());</p>
-
-<p><br />
-Use of Equals and Hashcode Method in Hibernate</p>
-
-<p>Hibernate is a popular, open source Java persistent framework, which provides Object Relational Mapping, also known as ORM framework. It uses equals and hashcode method to provide object&#39;s equality in Java side.&nbsp; You should override equals() and hashcode() if :</p>
-
-<p>1) You are storing instance of persistent class in a Set for representing many-valued associations.</p>
-
-<p>2) You are using reattachment of detached persistent instances.</p>
-
-<p>Another worth noting point is that Hibernate only guarantees equivalence of database row (persistent identity) and Java object inside a particular Session. Which means if you store instances retrieved in different Sessions in a Set, you will be having duplicates. Now the most important aspect of overriding equals and hashcode() for hibernate entity classes, you should never decide equality just based upon identifier. Though it&rsquo;s convenient to compare identifier to see if the belong to same database row, Unfortunately, we can&#39;t use this approach with generated identifiers. Since Hibernate only assign identifier values to the object that are persistent, a newly created instance will not have any identifier value. Similarly, if an instance is not persisted, and currently in a Set, saving it to database will assigned an identifier value, which will further change the value of hashcode() method, finally results in breaking the contract of the Set. That&#39;s why it&#39;s best to implement equals and hashcode in Hibernate using business key equality e.g. an Employee is same if it&#39;s name, surname, father&#39;s name, department, date of birth is same. Properties which are not prone to change e.g. date of birth are better candidate of business equality than those which is easier to change e.g. address and contact number.</p>
-
-<p>In short, remember these best practices while overriding equals() and hashcode() for Hibernate entity class :</p>
-
-<p>1) Don&#39;t let your equals() method only uses identifier values for equivalence check.</p>
-
-<p><br />
-2) Implement equals() and hashCode() using real word key that would identify instance in real world.</p>
-
-<p><br />
-3) Use Immutable and unique properties of objects for equality.</p>
-
-<p><br />
-4) Don&#39;t use getClass() to compare object equality because Hibernate uses proxy and this check will always fail. Instead use instanceof operator, it respect proxy because they have IS-A relationship with actual object.</p>
-
-<p><br />
-5) Use getter and setter methods to access properties instead of directly accessing the, because hibernate lazily initialize object, when there getProperty() method is called. Using name may return null but getName() may return value from database.</p>
-
-<p>&nbsp;</p>
-
-<p>That&rsquo;s all about overriding equals() and hashcode() methods in Java, I am reiterating this but its imperative for a Java programmer to be able to write equals , hashcode(), compareTo() method by hand. It is not just useful for learning purpose but to clear any coding exercise during Java interviews. Writing code for equals and hashcode is very popular programming interview questions now days. For Hibernate persistent class its rather tricky to override equals() and hashCode() because otherwise bad practices turns into best practices because of extensive of proxy. You should not use Eclipse IDE code generator for equals() and hashCode() for hibernate entity class, as they use getClass() to check type equality.</p>
-
-<p><br />
-Read more: http://javarevisited.blogspot.com/2011/02/how-to-write-equals-method-in-java.html#ixzz3cV3Wm5EF</p>
-</body>
+  <head>
+    <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+    <title>Equals and HashCode</title>
+  </head>
+  <body>
+    <h2><strong>Overriding equals() and hashCode() method in Java <br>
+      </strong></h2>
+    <p><strong>Override equals and hashCode in Java</strong></p>
+    <ul>
+      <li>Equals and hashCode in Java are two fundamental method which is
+        declared in Object class and part or core Java library.</li>
+      <li>equals() method is used to <strong>compare Objects for equality </strong>while
+        hashCode is used to <strong>generate an integer code corresponding to
+          that object</strong>.</li>
+      <li>equals and hashCode has used extensively in Java core library like
+        they are used while inserting and retrieving Object in HashMap,&nbsp;</li>
+      <li>equals method is also used to avoid duplicates on HashSet and other
+        Set implementation and every other place where you need to compare
+        Objects.</li>
+      <li>Default implementation of equals() class provided by java.lang.Object
+        <strong>compares memory location and only return true if two reference
+          variable are pointing to same memory </strong>location i.e.
+        essentially they are same object.</li>
+      <li>Java recommends to override equals and hashCode method if equality is
+        going to be define by logical way or via some business logic and many
+        classes in Java standard library does override it
+        <ul>
+          <li>e.g. String overrides equals,&nbsp; whose implementation of
+            equals() method return true if content of two String objects are
+            exactly same.</li>
+          <li>Integer wrapper class overrides equals to perform numerical
+            comparison etc.</li>
+        </ul>
+      </li>
+    </ul>
+    <p>Since HashMap and Hashtable in Java relies on equals() and hashCode()
+      method for comparing keys and values, Java provides following rules to
+      override equals method Java. As per following rule equals method in Java
+      should be:</p>
+    <ol>
+      <li><strong>Reflexive </strong>: Object must be equal to itself.</li>
+      <li><strong>Symmetric</strong> : if <strong>a.equals(b) is true then
+          b.equals(a)</strong> must be true.</li>
+      <li><strong>Transitive</strong> : if <strong>a.equals(b) is true and
+          b.equals(c) is true then c.equals(a)</strong> must be true.</li>
+      <li><strong>Consistent</strong> : multiple invocation of equals() method
+        must result same value until any of properties are modified. So if two
+        objects are equals in Java they will remain equals until any of there
+        property is modified.</li>
+      <li><strong>Null comparison</strong> : comparing any object to null must
+        be false and should not result in NullPointerException.
+        <ul>
+          <li>For example <strong>a.equals(null)</strong> must be false,
+            passing unknown object, which could be null,&nbsp; to equals in Java
+            is actually a Java coding best practice to avoid
+            NullPointerException in Java.</li>
+        </ul>
+      </li>
+    </ol>
+    <p>&nbsp;</p>
+    <p><strong>Equals and hashCode contract in Java</strong></p>
+    <p>equals method in Java must follow its contract with hashcode method in
+      Java as stated below.</p>
+    <ol>
+      <li>If two objects are equal by equals() method then there hashcode must
+        be same.</li>
+      <li>If two objects are not equal by equals() method then there hashcode
+        could be same or different.</li>
+    </ol>
+    <p>So this was the basic theory about equals method in Java now we are going
+      to discuss the approach on how to override equals() method, yes I know you
+      all know this stuff :) but I have seen some of equals() code which can be
+      improved by following correct approach. For illustration purpose we will
+      see an example of Person class and discuss How to write equals() method in
+      Java for that class.</p>
+    <p><strong>Steps to Override equals method in Java</strong></p>
+    <p>Here is my approach for overriding equals method in Java. This is based
+      on standard approach most of Java programmer follows while writing equals
+      method in Java.</p>
+    <p style="margin-left: 40px;">1) Do <strong>this </strong>check -- if yes
+      then return true.</p>
+    <p style="margin-left: 40px;">2) Do <strong>null </strong>check -- if yes
+      then return false.</p>
+    <p style="margin-left: 40px;">3) Do the <strong>instanceof </strong>check,&nbsp;
+      if instanceof return false than return false from equals in Java , after
+      some research I found that instead of instanceof we can use getClass()
+      method for type identification because instanceof check returns true for
+      subclass also, so its not strictly equals comparison until required by
+      business logic. But instanceof check is fine if your class is immutable
+      and no one is going to sub class it. For example we can replace instanceof
+      check by below code</p>
+    <p style="margin-left: 40px;">if((obj == null) || (obj.getClass() !=
+      this.getClass())) {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return false;<br>
+      }</p>
+    <p style="margin-left: 40px;">4) Type cast the object; note the sequence
+      instanceof check must be prior to casting object.</p>
+    <p style="margin-left: 40px;">5) Compare individual attribute starting with
+      numeric attribute because comparing numeric attribute is fast and use
+      short circuit operator for combining checks.&nbsp; If first field does not
+      match, don't try to match rest of attribute and return false. It&#8217;s also
+      worth to remember doing null check on individual attribute before calling
+      equals() method on them recursively to avoid NullPointerException during
+      equals check in Java.</p>
+    <p><strong>Code Example of overriding equals method in Java</strong></p>
+    <p>equals and hashCode method in Java and Hibernate example tutorialLet&#8217;s
+      see a code example based on my approach of overriding equals method in
+      Java as discussed in above paragraph and hashCode() method is generated by
+      Eclipse IDE, see my post&nbsp; 5 tips to override hashcode in Java for
+      detailed example and explanation of the right way to implement hashcode
+      method.</p>
+    <p style="margin-left: 40px;">/**<br>
+      &nbsp;* Person class with equals and hashcode implementation in Java<br>
+      &nbsp;* @author Javin Paul<br>
+      &nbsp;*/<br>
+      public class Person {<br>
+      &nbsp;&nbsp;&nbsp; private int id;<br>
+      &nbsp;&nbsp;&nbsp; private String firstName;<br>
+      &nbsp;&nbsp;&nbsp; private String lastName; &nbsp;&nbsp;&nbsp; public int
+      getId() { return id; }<br>
+      &nbsp;&nbsp;&nbsp; public void setId(int id) { this.id = id;}
+      &nbsp;&nbsp;&nbsp; public String getFirstName() { return firstName; }<br>
+      &nbsp;&nbsp;&nbsp; public void setFirstName(String firstName) {
+      this.firstName = firstName; } &nbsp;&nbsp;&nbsp; public String
+      getLastName() { return lastName; }<br>
+      &nbsp;&nbsp;&nbsp; public void setLastName(String lastName) {
+      this.lastName = lastName; } &nbsp;&nbsp;&nbsp; @Override<br>
+      &nbsp;&nbsp;&nbsp;<strong> public boolean equals(Object obj) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (obj == this) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        return true;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (obj == null ||
+        obj.getClass() != this.getClass()) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        return false;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Person guest = (Person) obj;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return id == guest.id<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &amp;&amp; (firstName == guest.firstName<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        || (firstName != null &amp;&amp;
+        firstName.equals(guest.getFirstName())))<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &amp;&amp; (lastName == guest.lastName<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        || (lastName != null &amp;&amp; lastName .equals(guest.getLastName())));<br>
+        &nbsp;&nbsp;&nbsp; }</strong><br>
+      &nbsp;&nbsp;&nbsp;<br>
+      &nbsp;&nbsp;&nbsp; @Override<br>
+      &nbsp;&nbsp;&nbsp;<strong> public int hashCode() {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; final int prime = 31;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; int result = 1;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result = prime * result<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        + ((firstName == null) ? 0 : firstName.hashCode());<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result = prime * result + id;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; result = prime * result<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        + ((lastName == null) ? 0 : lastName.hashCode());<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return result;<br>
+        &nbsp;&nbsp;&nbsp; }</strong><br>
+      &nbsp;&nbsp;&nbsp;<br>
+      }</p>
+    <p>If you look above method we are</p>
+    <ul>
+      <li>first checking for "this" check which is fastest available check for
+        equals method then</li>
+      <li>we are verifying whether object is null or not and object is of same
+        type or not.</li>
+      <li>only after verifying type of object we are casting it into desired
+        object to avoid any ClassCastException in Java.</li>
+      <li>Also while comparing individual attribute we are comparing numeric
+        attribute first using short circuit operator to avoid further
+        calculation if its already unequal and doing null check on member
+        attribute to avoid NullPointerException.</li>
+    </ul>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>Common Errors while overriding equals in
+        Java</strong></p>
+    <p>Though equals() and hashcode() method are defined in Object class along
+      with wait, notify and notifyAll,&nbsp; and one of fundamental part of Java
+      programming I have seen many programmers making mistake while writing
+      equals() method in Java. I recommend all Java programmer who has just
+      started programming to write couple of equals and hashcode method for
+      there domain or value object to get feel of it. Here I am listing some of
+      common mistakes I have observed on various equals method in Java, if you
+      like to learn more about common mistakes in Java programming then see my
+      post Don&#8217;t use float and double for monetary calculation and Mixing static
+      and non static synchronized method. Now let&#8217;s see common mistakes by Java
+      programmers while overriding equals in Java :</p>
+    <p>1) Instead of overriding equals() method programmer overloaded it.<br>
+      This is the most common error I have seen while overriding equals method
+      in Java. Syntax of equals method defined in Object class is public boolean
+      equals(Object obj) but many people unintentionally overloads equals method
+      in Java by writing public boolean equals(Person obj), instead of using
+      Object as argument they use there class name. This error is very hard to
+      detect because of static binding. So if you call this method in your class
+      object it will not only compile but also execute correctly but if you try
+      to put your object in collection e.g. ArrayList and call contains() method
+      which is based on equals() method in Java it will not able to detect your
+      object. So beware of it. This question is also a frequently asked question
+      in Java interviews as part of Overloading vs Overriding in Java as how do
+      you prevent this from happening ? Thankfully along-with Generics, Enum,
+      autoboxing and varargs Java 5 also introduces @Override annotation which
+      can be used to tell compiler that you are overriding a method and than
+      compiler will be able to detect this error during compile time.
+      Consistently using @Override annotation is also a best practice in Java.</p>
+    <p>2) Second mistake I have seen while overriding equals() method is not
+      doing null check for member variables which ultimately results in
+      NullPointerException in Java during equals() invocation. For example in
+      above code correct way of calling equals() method of member variable is
+      after doing null check as shown below:</p>
+    <p>firstname == guest.firstname || (firstname != null &amp;amp;&amp;amp;
+      firstname.equals(guest.firstname)));</p>
+    <p>3) Third common mistake is not overriding hashCode method in Java and
+      only overriding equals() method. You must have to override both equals()
+      and hashCode() method in Java , otherwise your value object will not be
+      able to use as key object in HashMap because working of HashMap is based
+      on equals() and hashCode to read more see , How HashMap works in Java.</p>
+    <p>4) Last common mistake programmer make while overriding equals() in Java
+      is not keeping equals() and compareTo() method consistent which is a non
+      formal requirement in order to obey contract of Set to avoid duplicates.
+      SortedSet implementation like TreeSet uses compareTo to compare two
+      objects like String and if compareTo() and equals() will not be consistent
+      than TreeSet will allow duplicates which will break Set contract of not
+      having duplicates. To learn more about this issue see my post Things to
+      remember while overriding compareTo in Java</p>
+    <p><strong>Writing JUnit tests for equals method in Java</strong></p>
+    <p>Its good coding practice to write JUnit test cases to test your equals
+      and hashCode method. Here is my approach for writing JUnit test case for
+      equals method in Java. I will write test cases to check equals behaviour,
+      contract of equals and hasCode method and properties of equals method in
+      Java on different circumstances. You can also JUnit4 annotation to write
+      JUnit test cases, than you don&#8217;t need to use test prefix on test method,
+      just use @Test annotations.</p>
+    <ul>
+      <li>testReflexive() this method will test reflexive nature of equals()
+        method in Java.</li>
+      <li>testSymmeteric() this method will verify symmetric nature of equals()
+        in Java.</li>
+      <li>testNull() this method will verify null comparison and will pass if
+        equals method returns false.</li>
+      <li>testConsistent() should verify consistent nature of equals method in
+        Java.</li>
+      <li>testNotEquals() should verify if two object which are not supposed to
+        equals is actually not equal, having negative test cases in test suite
+        is mandatory.</li>
+      <li>testHashCode() will verify that if two objects are equal by equals()
+        method in Java then there hashcode must be same. This is an important
+        test if you are thinking to use this object as key in HashMap or
+        Hashtable</li>
+    </ul>
+    <p>&nbsp;</p>
+    <p>5 Tips on writing equals method in Java</p>
+    <p>Here are some tips to implement equals and hashCode method in Java, this
+      will help you to do it correctly and with ease:</p>
+    <p>1) Most of the IDE like NetBeans, Eclipse and IntelliJ IDEA provides
+      support to generate equals() and hashcode() method. In Eclipse do the
+      right click-&gt; source -&gt; generate hashCode() and equals().</p>
+    <p><br>
+      2) If your domain class has any unique business key then just comparing
+      that field in equals method would be enough instead of comparing all the
+      fields e.g. in case of our example if "id" is unique for every Person and
+      by just comparing id we can identify whether two Person are equal or not.</p>
+    <p><br>
+      3) While overriding hashCode in Java makes sure you use all fields which
+      have been used in equals method in Java.</p>
+    <p><br>
+      4) String and Wrapper classes like Integer, Float and Double override
+      equals method but StringBuffer doesn&#8217;t override it.</p>
+    <p><br>
+      5) Whenever possible try to make your fields immutable by using final
+      variables in Java, equals method based on immutable fields are much secure
+      than on mutable fields.</p>
+    <p><br>
+      6) Don't use instanceof check in equals method, as it could break contract
+      of equals() method in sub-class, results in non-symmetric equals, because
+      instanceof return true for child class as well. For example, if you
+      compare two objects Parent and Child from same type-hierarchy;
+      Parent.equals(child) will return true, because child instanceof Parent is
+      true, but Child.equals(parent) will return false, because Parent
+      instanceof Child is false. This means equals() is not following symmetric
+      contract, which states if a.equals(b) == true than b.equals(a) == true, as
+      shown below :</p>
+    <p>public class Parent {<br>
+      }</p>
+    <p>public class Child extends Parent {<br>
+      }</p>
+    <p>public class InstanceOfCheck {</p>
+    <p>&nbsp;&nbsp;&nbsp; public static void main(String args[]) {</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Parent p = new Parent();<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Child c = new Child();</p>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println("child
+      instanceof Parent " + (c instanceof Parent));<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; System.out.println("parent
+      instanceof Child " + (p instanceof Child));</p>
+    <p>&nbsp;&nbsp;&nbsp; }</p>
+    <p>}</p>
+    <p>Output :<br>
+      child instanceof Parent true<br>
+      parent instanceof Child false</p>
+    <p>Alternatively, you can mark equals as final method to prevent it from
+      being overridden.</p>
+    <p><br>
+      7) While comparing String object in Java, prefer equals() than ==
+      operator.</p>
+    <p><br>
+      8) Use IDE or Apache commons EqualsBuilder and HashCodeBuilder utility
+      classes to automatically implement equals() and hashcode() method in Java.</p>
+    <p><br>
+      9) Two object which is logically equal but loaded from different
+      ClassLoader cannot be equals. Remember that getClass() check, it will
+      return false if class loader is different.</p>
+    <p><br>
+      10) Use @Override annotation on hashcode() as well, as it also prevents
+      subtle mistakes over return type. e.g. return type of hashcode() method is
+      int, but many times programmers mistakenly put long.</p>
+    <p><br>
+      11) One&nbsp; example, where equals method is not consistent with
+      compareTo is java.math.BigDecimal class. If you compare two BigDecimal
+      object e.g. 120.00 and 120.000, equals method will return false, while
+      compareTo will return zero. Both are inconsistent, because equals take
+      both scale and value in consideration, while compareTo method only
+      consider values.</p>
+    <p><br>
+      12) From Java 7 you can also use a new utility class called
+      java.util.Objects for null safe equality check and calculating hash code.
+      You can replace our null-safe code for check equality :</p>
+    <p>(name == guest.name || (name != null &amp;amp;&amp;amp;
+      name.equals(guest.getName())))</p>
+    <p>to much concise</p>
+    <p>Objects.equals(name, guest.getName());</p>
+    <p><br>
+      Use of Equals and Hashcode Method in Hibernate</p>
+    <p>Hibernate is a popular, open source Java persistent framework, which
+      provides Object Relational Mapping, also known as ORM framework. It uses
+      equals and hashcode method to provide object's equality in Java
+      side.&nbsp; You should override equals() and hashcode() if :</p>
+    <p>1) You are storing instance of persistent class in a Set for representing
+      many-valued associations.</p>
+    <p>2) You are using reattachment of detached persistent instances.</p>
+    <p>Another worth noting point is that Hibernate only guarantees equivalence
+      of database row (persistent identity) and Java object inside a particular
+      Session. Which means if you store instances retrieved in different
+      Sessions in a Set, you will be having duplicates. Now the most important
+      aspect of overriding equals and hashcode() for hibernate entity classes,
+      you should never decide equality just based upon identifier. Though it&#8217;s
+      convenient to compare identifier to see if the belong to same database
+      row, Unfortunately, we can't use this approach with generated identifiers.
+      Since Hibernate only assign identifier values to the object that are
+      persistent, a newly created instance will not have any identifier value.
+      Similarly, if an instance is not persisted, and currently in a Set, saving
+      it to database will assigned an identifier value, which will further
+      change the value of hashcode() method, finally results in breaking the
+      contract of the Set. That's why it's best to implement equals and hashcode
+      in Hibernate using business key equality e.g. an Employee is same if it's
+      name, surname, father's name, department, date of birth is same.
+      Properties which are not prone to change e.g. date of birth are better
+      candidate of business equality than those which is easier to change e.g.
+      address and contact number.</p>
+    <p>In short, remember these best practices while overriding equals() and
+      hashcode() for Hibernate entity class :</p>
+    <p>1) Don't let your equals() method only uses identifier values for
+      equivalence check.</p>
+    <p><br>
+      2) Implement equals() and hashCode() using real word key that would
+      identify instance in real world.</p>
+    <p><br>
+      3) Use Immutable and unique properties of objects for equality.</p>
+    <p><br>
+      4) Don't use getClass() to compare object equality because Hibernate uses
+      proxy and this check will always fail. Instead use instanceof operator, it
+      respect proxy because they have IS-A relationship with actual object.</p>
+    <p><br>
+      5) Use getter and setter methods to access properties instead of directly
+      accessing the, because hibernate lazily initialize object, when there
+      getProperty() method is called. Using name may return null but getName()
+      may return value from database.</p>
+    <p>&nbsp;</p>
+    <p>That&#8217;s all about overriding equals() and hashcode() methods in Java, I am
+      reiterating this but its imperative for a Java programmer to be able to
+      write equals , hashcode(), compareTo() method by hand. It is not just
+      useful for learning purpose but to clear any coding exercise during Java
+      interviews. Writing code for equals and hashcode is very popular
+      programming interview questions now days. For Hibernate persistent class
+      its rather tricky to override equals() and hashCode() because otherwise
+      bad practices turns into best practices because of extensive of proxy. You
+      should not use Eclipse IDE code generator for equals() and hashCode() for
+      hibernate entity class, as they use getClass() to check type equality.</p>
+    <p><br>
+      Read more:
+http://javarevisited.blogspot.com/2011/02/how-to-write-equals-method-in-java.html#ixzz3cV3Wm5EF</p>
+  </body>
 </html>

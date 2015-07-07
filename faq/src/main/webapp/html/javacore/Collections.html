@@ -3,15 +3,6 @@
 <head>
 	<meta charset="ISO-8859-1" />
 	<title>Collections</title>
-    <style type="text/css"><!--
-    body{
-        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
-        font-size : 20px;
-        width : 1080px;
-        line-height: 1.5;
-    }
--->
-	</style>
 </head>
 <body>
 <h1 style="text-align: center;"><strong>Java Collections : Internal Working</strong></h1>
@@ -25,7 +16,7 @@
 <p>First the basics.<br />
 Below two image shows the complete hierarchy of interfaces and classes present in the Collection framework.</p>
 
-<p><img src="../../img/Collection-Classes.jpg" width="500" /></p>
+<p><img src="../../img/Collection-Classes.jpg"/></p>
 
 <p><br />
 The Collections come in basic four flavours:<br />
@@ -36,7 +27,7 @@ The Collections come in basic four flavours:<br />
 
 <p>The blue ones are the Interfaces and the red ones are the implementation classes</p>
 
-<p><img src="../../img/Collection-Classes_Map.jpg" width="500" /></p>
+<p><img src="../../img/Collection-Classes_Map.jpg" /></p>
 
 <p><br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Below table shows the different concrete classes implementing these interfaces</p>
@@ -211,7 +202,7 @@ So when we want to fetch a element using get(K key), HashMap first identifies th
 
 <p>Lets see how HashMap implements this logic internally.</p>
 
-<p><img src="../../img/HashMap.JPG" width="500" /></p>
+<p><img data-src="/img/HashMap.JPG" src="../../img/HashMap.JPG" /></p>
 
 <p>For fast access to a value HashMap places a element (both key and value) in a SinglyLinkedList(Bucket). All the elements that have the same hascode are placed in the same SinglyLinkedList. The number of SinglyLinkedList(buckets) depends upon how many objects are present with different hashcode. To hold these buckets together a array is used. The size of the array is initially defined to 12. And it changes as new elements with different hascodes are added. Lets see the pictorial view.<br />
 The structure of the &#39;Entry&#39; class used above.</p>

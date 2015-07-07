@@ -1,0 +1,181 @@
+<h2>Singleton</h2>
+    <strong>What is Singleton? is it better to make whole method synchronized or
+      only critical section synchronized ?</strong>
+    <p>Singleton in Java is a class with just one instance in whole Java
+      application, for example java.lang.Runtime is a Singleton class. Creating
+      Singleton was tricky prior Java 4 but once Java 5 introduced Enum its very
+      easy. see my article How to create thread-safe Singleton in Java for more
+      details on writing Singleton using enum and double checked locking which
+      is purpose of this Java interview question.</p>
+    <p><strong>Can you write critical section code for singleton?</strong><br>
+      This core Java question is followup of previous question and expecting
+      candidate to write Java singleton using double checked locking. Remember
+      to use volatile variable to make Singleton thread-safe. check 10 Interview
+      questions on Singleton Pattern in Java for more details and questions
+      answers</p>
+    <p><strong>What is Singleton class? Have you used Singleton before?</strong></p>
+    <p>Singleton is a class which has only one instance in whole application and
+      provides a getInstance() method to access the singleton instance. There
+      are many classes in JDK which is implemented using Singleton pattern like
+      java.lang.Runtime which provides getRuntime() method to get access of it
+      and used to get free memory and total memory in Java.</p>
+    <p><strong>Which classes are candidates of Singleton? Which kind of class do
+        you make Singleton in Java?</strong></p>
+    <p>Here they check whether candidate has enough experience on usage of
+      singleton or not. Does he is familiar of advantage/disadvantage or
+      alternatives available for singleton in Java or not.</p>
+    <p>Answer : Any class which you want to be available to whole application
+      and whole only one instance is viable is candidate of becoming Singleton.
+      One example of this is Runtime class , since on whole java application
+      only one runtime environment can be possible making Runtime Singleton is
+      right decision. Another example is a utility classes like Popup in GUI
+      application, if you want to show popup with message you can have one PopUp
+      class on whole GUI application and anytime just get its instance, and call
+      show() with message.</p>
+    <p><strong>Can you write code for getInstance() method of a Singleton class
+        in Java?</strong></p>
+    <p>Most of the java programmer fail here if they have mugged up the
+      singleton code because you can ask lots of follow-up question based upon
+      the code they have written. I have seen many programmer write Singleton
+      getInstance() method with double checked locking but they are not really
+      familiar with the caveat associated with double checking of singleton
+      prior to Java 5.</p>
+    <p>Answer : Until asked don?t write code using double checked locking as it
+      is more complex and chances of errors are more but if you have deep
+      knowledge of double checked locking, volatile variable and lazy loading
+      than this is your chance to shine. I have shared code examples of writing
+      singleton classes using enum, using static factory and with double checked
+      locking in my recent post Why Enum Singletons are better in Java, please
+      see there.</p>
+    <p><strong>Is it better to make whole getInstance() method synchronized or
+        just critical section is enough? Which one you will prefer?</strong></p>
+    <p>This is really nice question and I mostly asked to just quickly check
+      whether candidate is aware of performance trade off of unnecessary locking
+      or not. Since locking only make sense when we need to create instance and
+      rest of the time its just read only access so locking of critical section
+      is always better option. read more about synchronization on How
+      Synchronization works in Java<br>
+      Answer : This is again related to double checked locking pattern, well
+      synchronization is costly and when you apply this on whole method than
+      call to getInstance() will be synchronized and contented. Since
+      synchronization is only needed during initialization on singleton
+      instance, to prevent creating another instance of Singleton, It?s better
+      to only synchronize critical section and not whole method. Singleton
+      pattern is also closely related to factory design pattern where
+      getInstance() serves as static factory method.</p>
+    <p><strong>What is lazy and early loading of Singleton and how will you
+        implement it?</strong></p>
+    <p>This is another great Singleton interview question in terms of
+      understanding of concept of loading and cost associated with class loading
+      in Java. Many of which I have interviewed not really familiar with this
+      but its good to know concept.</p>
+    <p>Answer : As there are many ways to implement Singleton like using double
+      checked locking or Singleton class with static final instance initialized
+      during class loading. Former is called lazy loading because Singleton
+      instance is created only when client calls getInstance() method while
+      later is called early loading because Singleton instance is created when
+      class is loaded into memory.</p>
+    <p><strong>Give me some examples of Singleton pattern from Java Development
+        Kit?</strong></p>
+    <p>This is open question to all, please share which classes are Singleton in
+      JDK. Answer to this question is java.lang.Runtime<br>
+      Answer : There are many classes in Java Development Kit which is written
+      using singleton pattern, here are few of them:<br>
+      Java.lang.Runtime with getRuntime() method<br>
+      Java.awt.Toolkit with getDefaultToolkit()<br>
+      Java.awt.Desktop with getDesktop()</p>
+    <p><strong>What is double checked locking in Singleton?</strong></p>
+    <p>One of the most hyped question on Singleton pattern and really demands
+      complete understanding to get it right because of Java Memory model caveat
+      prior to Java 5. If a guy comes up with a solution of using volatile
+      keyword with Singleton instance and explains it then it really shows it
+      has in depth knowledge of Java memory model and he is constantly updating
+      his Java knowledge.</p>
+    <p>Answer : Double checked locking is a technique to prevent creating
+      another instance of Singleton when call to getInstance() method is made in
+      multi-threading environment. In Double checked locking pattern as shown in
+      below example, singleton instance is checked two times before
+      initialization. See here to learn more about double-checked-locking in
+      Java.</p>
+    <p style="margin-left: 40px;">public static Singleton getInstance(){<br>
+      &nbsp;&nbsp;&nbsp;&nbsp; if(_INSTANCE == null){<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      synchronized(Singleton.class){<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //double checked locking
+      - because second check of Singleton instance with lock<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      if(_INSTANCE == null){<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      _INSTANCE = new Singleton();<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      }<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
+      &nbsp;&nbsp;&nbsp;&nbsp; return _INSTANCE;<br>
+      }</p>
+    <p>Double checked locking should only be used when you have requirement for
+      lazy initialization otherwise use Enum to implement singleton or simple
+      static final variable.</p>
+    <p><strong>How do you prevent for creating another instance of Singleton
+        using clone() method?</strong></p>
+    <p>This type of questions generally comes some time by asking how to break
+      singleton or when Singleton is not Singleton in Java.</p>
+    <p>Answer : Preferred way is not to implement Cloneable interface as why
+      should one wants to create clone() of Singleton and if you do just throw
+      Exception from clone() method as ?Can not create clone of Singleton
+      class?.</p>
+    <p><strong>How do you prevent for creating another instance of Singleton
+        using reflection?</strong></p>
+    <p>Open to all. In my opinion throwing exception from constructor is an
+      option.<br>
+      Answer: This is similar to previous interview question. Since constructor
+      of Singleton class is supposed to be private it prevents creating instance
+      of Singleton from outside but Reflection can access private fields and
+      methods, which opens a threat of another instance. This can be avoided by
+      throwing Exception from constructor as ?Singleton already initialized?</p>
+    <p><strong>How do you prevent for creating another instance of Singleton
+        during serialization?</strong></p>
+    <p>Another great question which requires knowledge of Serialization in Java
+      and how to use it for persisting Singleton classes. This is open to you
+      all but in my opinion use of readResolve() method can sort this out for
+      you.<br>
+      Answer: You can prevent this by using readResolve() method, since during
+      serialization readObject() is used to create instance and it return new
+      instance every time but by using readResolve you can replace it with
+      original Singleton instance. I have shared code on how to do it in my post
+      Enum as Singleton in Java. This is also one of the reason I have said that
+      use Enum to create Singleton because serialization of enum is taken care
+      by JVM and it provides guaranteed of that.</p>
+    <p><strong>When is Singleton not a Singleton in Java?</strong></p>
+    <p>There is a very good article present in Sun's Java site which discusses
+      various scenarios when a Singleton is not really remains Singleton and
+      multiple instance of Singleton is possible. Here is the link of that
+      article
+      http://java.sun.com/developer/technicalArticles/Programming/singletons/</p>
+    <p><strong>Why you should avoid the singleton anti-pattern at all and
+        replace it with DI?</strong></p>
+    <p>Answer : Singleton Dependency Injection: every class that needs access to
+      a singleton gets the object through its constructors or with a
+      DI-container.</p>
+    <p><strong>Why Singleton is Anti pattern</strong></p>
+    <p>With more and more classes calling getInstance() the code gets more and
+      more tightly coupled, monolithic, not testable and hard to change and hard
+      to reuse because of not configurable, hidden dependencies. Also, there
+      would be no need for this clumsy double checked locking if you call
+      getInstance less often (i.e. once).</p>
+    <p><strong>How many ways you can write Singleton Class in Java?</strong></p>
+    <p>Answer : I know at least four ways to implement Singleton pattern in Java<br>
+      Singleton by synchronizing getInstance() method<br>
+      Singleton with public static final field initialized during class loading.<br>
+      Singleton generated by static nested class, also referred as Singleton
+      holder pattern.<br>
+      From Java 5 on-wards using Enums</p>
+    <p><strong>How to write thread-safe Singleton in Java?</strong></p>
+    <p>Answer : Thread safe Singleton usually refers to write thread safe code
+      which creates one and only one instance of Singleton if called by multiple
+      thread at same time. There are many ways to achieve this like by using
+      double checked locking technique as shown above and by using Enum or
+      Singleton initialized by class loader.</p>
+    <p><br>
+      Read more:
+http://javarevisited.blogspot.com/2011/03/10-interview-questions-on-singleton.html#ixzz3dA3n2g7b

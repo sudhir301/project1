@@ -3,18 +3,20 @@
   <head>
     <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
     <title>FAQ 1</title>
-    <style type="text/css"><!--
-    body{
-        font-family: "Trebuchet MS",Verdana,Arial,Sans-serif;
-        font-size : 20px;
-        width : 1080px;
-        line-height: 1.5;        
-    }
--->
-	</style>
   </head>
   <body>
     <h2 style="text-align: center;">JAVA CORE</h2>
+    <h2>General Core</h2>
+    <p><strong>What is the difference between factory and abstract factory
+        pattern?</strong> </p>
+    <p>Abstract Factory provides one more level of abstraction. Consider
+      different factories each extended from an Abstract Factory and responsible
+      for creation of different hierarchies of objects based on the type of
+      factory. E.g. AbstractFactory extended by AutomobileFactory, UserFactory,
+      RoleFactory etc. Each individual factory would be responsible for creation
+      of objects in that genre.&nbsp; See here for detailed answer of this
+      question.</p>
+    <p><strong></strong></p>
     <h2>String &amp; Immutable Class</h2>
     <p><strong>What is Immutable Object? Can you write Immutable Class?</strong></p>
     <ul>
@@ -65,6 +67,14 @@
       pool. This is the one point, which has gone unnoticed, until knowledgeable
       readers of Javarevisited blog suggested it.&nbsp; <a href="stringLiteral.html">
         To learn more about difference between String literal and String object.</a></p>
+    <p><strong>What is the difference when String is gets created using literal
+        or new() operator?</strong><br>
+      When we create string with new() operator, its created in heap only and
+      not added into string pool, while String created using literal are created
+      in String pool itself which exists in PermGen area of heap. You can put
+      such string object into pool by calling intern() method. If you happen to
+      create same String object multiple times, intern() can save some memory
+      for you.</p>
     <p><strong>How does substring () inside String works?</strong></p>
     <p>Substring creates new object out of source string by taking a portion of
       original string?. This question was mainly asked to see if developer is
@@ -131,6 +141,10 @@
       you know is that every time substring() returns new String which is not
       exactly true, since it?s backed by same character array.</p>
     <p style="margin-left: 40px;">Read more: <a href="http://javarevisited.blogspot.com/2011/10/how-substring-in-java-works.html#ixzz3cV2eOq5V">http://javarevisited.blogspot.com/2011/10/how-substring-in-java-works.html#ixzz3cV2eOq5V</a></p>
+    <p><br>
+      <strong></strong></p>
+    <h2><strong>Collections<br>
+      </strong></h2>
     <p><strong>Which two method you need to implement to use an Object as key in
         HashMap?</strong></p>
     <p>In order to use any object as Key in HashMap or Hashtable, it must<strong>
@@ -149,211 +163,6 @@
       Map.Entry object are evaluated by using equals() method to see if they
       contain the actual key object or not. See How get method of HashMap works
       in Java for detailed explanation.</p>
-    <p><br>
-      <strong>What is difference between Executor.submit() and
-        Executer.execute() method ?</strong></p>
-    <p>former returns an object of Future which can be used to find result from
-      worker thread</p>
-    <p>By the way @vinit Saini suggested a very good point related to this core
-      Java interview question<br>
-      There is a difference when looking at exception handling. If your tasks
-      throws an exception and if it was submitted with execute this exception
-      will go to the uncaught exception handler (when you don't have provided
-      one explicitly, the default one will just print the stack trace to
-      System.err). If you submitted the task with submit any thrown exception,
-      checked exception or not, is then part of the task's return status. For a
-      task that was submitted with submit and that terminates with an exception,
-      the Future.get() will re-throw this exception, wrapped in an
-      ExecutionException.</p>
-    <p><strong>What is the difference between factory and abstract factory
-        pattern?</strong></p>
-    <p>Abstract Factory provides one more level of abstraction. Consider
-      different factories each extended from an Abstract Factory and responsible
-      for creation of different hierarchies of objects based on the type of
-      factory. E.g. AbstractFactory extended by AutomobileFactory, UserFactory,
-      RoleFactory etc. Each individual factory would be responsible for creation
-      of objects in that genre.&nbsp; See here for detailed answer of this
-      question.</p>
-    <p><strong>What is Singleton? is it better to make whole method synchronized
-        or only critical section synchronized ?</strong></p>
-    <p>Singleton in Java is a class with just one instance in whole Java
-      application, for example java.lang.Runtime is a Singleton class. Creating
-      Singleton was tricky prior Java 4 but once Java 5 introduced Enum its very
-      easy. see my article How to create thread-safe Singleton in Java for more
-      details on writing Singleton using enum and double checked locking which
-      is purpose of this Java interview question.</p>
-    <p><strong>Can you write critical section code for singleton?</strong><br>
-      This core Java question is followup of previous question and expecting
-      candidate to write Java singleton using double checked locking. Remember
-      to use volatile variable to make Singleton thread-safe. check 10 Interview
-      questions on Singleton Pattern in Java for more details and questions
-      answers</p>
-    <p><strong>What is Singleton class? Have you used Singleton before?</strong></p>
-    <p>Singleton is a class which has only one instance in whole application and
-      provides a getInstance() method to access the singleton instance. There
-      are many classes in JDK which is implemented using Singleton pattern like
-      java.lang.Runtime which provides getRuntime() method to get access of it
-      and used to get free memory and total memory in Java.</p>
-    <p><strong>Which classes are candidates of Singleton? Which kind of class do
-        you make Singleton in Java?</strong></p>
-    <p>Here they check whether candidate has enough experience on usage of
-      singleton or not. Does he is familiar of advantage/disadvantage or
-      alternatives available for singleton in Java or not.</p>
-    <p>Answer : Any class which you want to be available to whole application
-      and whole only one instance is viable is candidate of becoming Singleton.
-      One example of this is Runtime class , since on whole java application
-      only one runtime environment can be possible making Runtime Singleton is
-      right decision. Another example is a utility classes like Popup in GUI
-      application, if you want to show popup with message you can have one PopUp
-      class on whole GUI application and anytime just get its instance, and call
-      show() with message.</p>
-    <p><strong>Can you write code for getInstance() method of a Singleton class
-        in Java?</strong></p>
-    <p>Most of the java programmer fail here if they have mugged up the
-      singleton code because you can ask lots of follow-up question based upon
-      the code they have written. I have seen many programmer write Singleton
-      getInstance() method with double checked locking but they are not really
-      familiar with the caveat associated with double checking of singleton
-      prior to Java 5.</p>
-    <p>Answer : Until asked don?t write code using double checked locking as it
-      is more complex and chances of errors are more but if you have deep
-      knowledge of double checked locking, volatile variable and lazy loading
-      than this is your chance to shine. I have shared code examples of writing
-      singleton classes using enum, using static factory and with double checked
-      locking in my recent post Why Enum Singletons are better in Java, please
-      see there.</p>
-    <p><strong>Is it better to make whole getInstance() method synchronized or
-        just critical section is enough? Which one you will prefer?</strong></p>
-    <p>This is really nice question and I mostly asked to just quickly check
-      whether candidate is aware of performance trade off of unnecessary locking
-      or not. Since locking only make sense when we need to create instance and
-      rest of the time its just read only access so locking of critical section
-      is always better option. read more about synchronization on How
-      Synchronization works in Java<br>
-      Answer : This is again related to double checked locking pattern, well
-      synchronization is costly and when you apply this on whole method than
-      call to getInstance() will be synchronized and contented. Since
-      synchronization is only needed during initialization on singleton
-      instance, to prevent creating another instance of Singleton, It?s better
-      to only synchronize critical section and not whole method. Singleton
-      pattern is also closely related to factory design pattern where
-      getInstance() serves as static factory method.</p>
-    <p><strong>What is lazy and early loading of Singleton and how will you
-        implement it?</strong></p>
-    <p>This is another great Singleton interview question in terms of
-      understanding of concept of loading and cost associated with class loading
-      in Java. Many of which I have interviewed not really familiar with this
-      but its good to know concept.</p>
-    <p>Answer : As there are many ways to implement Singleton like using double
-      checked locking or Singleton class with static final instance initialized
-      during class loading. Former is called lazy loading because Singleton
-      instance is created only when client calls getInstance() method while
-      later is called early loading because Singleton instance is created when
-      class is loaded into memory.</p>
-    <p><strong>Give me some examples of Singleton pattern from Java Development
-        Kit?</strong></p>
-    <p>This is open question to all, please share which classes are Singleton in
-      JDK. Answer to this question is java.lang.Runtime<br>
-      Answer : There are many classes in Java Development Kit which is written
-      using singleton pattern, here are few of them:<br>
-      Java.lang.Runtime with getRuntime() method<br>
-      Java.awt.Toolkit with getDefaultToolkit()<br>
-      Java.awt.Desktop with getDesktop()</p>
-    <p><strong>What is double checked locking in Singleton?</strong></p>
-    <p>One of the most hyped question on Singleton pattern and really demands
-      complete understanding to get it right because of Java Memory model caveat
-      prior to Java 5. If a guy comes up with a solution of using volatile
-      keyword with Singleton instance and explains it then it really shows it
-      has in depth knowledge of Java memory model and he is constantly updating
-      his Java knowledge.</p>
-    <p>Answer : Double checked locking is a technique to prevent creating
-      another instance of Singleton when call to getInstance() method is made in
-      multi-threading environment. In Double checked locking pattern as shown in
-      below example, singleton instance is checked two times before
-      initialization. See here to learn more about double-checked-locking in
-      Java.</p>
-    <p style="margin-left: 40px;">public static Singleton getInstance(){<br>
-      &nbsp;&nbsp;&nbsp;&nbsp; if(_INSTANCE == null){<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      synchronized(Singleton.class){<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //double checked locking
-      - because second check of Singleton instance with lock<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      if(_INSTANCE == null){<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      _INSTANCE = new Singleton();<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      }<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br>
-      &nbsp;&nbsp;&nbsp;&nbsp; return _INSTANCE;<br>
-      }</p>
-    <p>Double checked locking should only be used when you have requirement for
-      lazy initialization otherwise use Enum to implement singleton or simple
-      static final variable.</p>
-    <p><strong>How do you prevent for creating another instance of Singleton
-        using clone() method?</strong></p>
-    <p>This type of questions generally comes some time by asking how to break
-      singleton or when Singleton is not Singleton in Java.</p>
-    <p>Answer : Preferred way is not to implement Cloneable interface as why
-      should one wants to create clone() of Singleton and if you do just throw
-      Exception from clone() method as ?Can not create clone of Singleton
-      class?.</p>
-    <p><strong>How do you prevent for creating another instance of Singleton
-        using reflection?</strong></p>
-    <p>Open to all. In my opinion throwing exception from constructor is an
-      option.<br>
-      Answer: This is similar to previous interview question. Since constructor
-      of Singleton class is supposed to be private it prevents creating instance
-      of Singleton from outside but Reflection can access private fields and
-      methods, which opens a threat of another instance. This can be avoided by
-      throwing Exception from constructor as ?Singleton already initialized?</p>
-    <p><strong>How do you prevent for creating another instance of Singleton
-        during serialization?</strong></p>
-    <p>Another great question which requires knowledge of Serialization in Java
-      and how to use it for persisting Singleton classes. This is open to you
-      all but in my opinion use of readResolve() method can sort this out for
-      you.<br>
-      Answer: You can prevent this by using readResolve() method, since during
-      serialization readObject() is used to create instance and it return new
-      instance every time but by using readResolve you can replace it with
-      original Singleton instance. I have shared code on how to do it in my post
-      Enum as Singleton in Java. This is also one of the reason I have said that
-      use Enum to create Singleton because serialization of enum is taken care
-      by JVM and it provides guaranteed of that.</p>
-    <p><strong>When is Singleton not a Singleton in Java?</strong></p>
-    <p>There is a very good article present in Sun's Java site which discusses
-      various scenarios when a Singleton is not really remains Singleton and
-      multiple instance of Singleton is possible. Here is the link of that
-      article
-      http://java.sun.com/developer/technicalArticles/Programming/singletons/</p>
-    <p><strong>Why you should avoid the singleton anti-pattern at all and
-        replace it with DI?</strong></p>
-    <p>Answer : Singleton Dependency Injection: every class that needs access to
-      a singleton gets the object through its constructors or with a
-      DI-container.</p>
-    <p><strong>Why Singleton is Anti pattern</strong></p>
-    <p>With more and more classes calling getInstance() the code gets more and
-      more tightly coupled, monolithic, not testable and hard to change and hard
-      to reuse because of not configurable, hidden dependencies. Also, there
-      would be no need for this clumsy double checked locking if you call
-      getInstance less often (i.e. once).</p>
-    <p><strong>How many ways you can write Singleton Class in Java?</strong></p>
-    <p>Answer : I know at least four ways to implement Singleton pattern in Java<br>
-      Singleton by synchronizing getInstance() method<br>
-      Singleton with public static final field initialized during class loading.<br>
-      Singleton generated by static nested class, also referred as Singleton
-      holder pattern.<br>
-      From Java 5 on-wards using Enums</p>
-    <p><strong>How to write thread-safe Singleton in Java?</strong></p>
-    <p>Answer : Thread safe Singleton usually refers to write thread safe code
-      which creates one and only one instance of Singleton if called by multiple
-      thread at same time. There are many ways to achieve this like by using
-      double checked locking technique as shown above and by using Enum or
-      Singleton initialized by class loader.</p>
-    <p><br>
-      Read more:
-http://javarevisited.blogspot.com/2011/03/10-interview-questions-on-singleton.html#ixzz3dA3n2g7b</p>
     <p><br>
       <strong>Can you write code for iterating over HashMap in Java 4 and Java 5
         ?</strong><br>
@@ -402,17 +211,9 @@ http://javarevisited.blogspot.com/2011/03/10-interview-questions-on-singleton.ht
       performance upto 10 to 20 times. By the way, there are several ways to
       create thread-safe singleton in Java, which you can also mention as part
       of this question or any follow-up.</p>
-    <p><strong>What is the difference when String is gets created using literal
-        or new() operator?</strong><br>
-      When we create string with new() operator, its created in heap only and
-      not added into string pool, while String created using literal are created
-      in String pool itself which exists in PermGen area of heap. You can put
-      such string object into pool by calling intern() method. If you happen to
-      create same String object multiple times, intern() can save some memory
-      for you.</p>
-    <p><strong>Does not overriding hashcode() method has any performance
-        implication ?</strong><br>
-      This is a good question and open to all , as per my knowledge a poor
+    <strong>Does not overriding hashcode() method has any performance
+      implication ?</strong><br>
+    <p> This is a good question and open to all , as per my knowledge a poor
       hashcode function will result in frequent collision in HashMap which
       eventually increase time for adding an object into Hash Map.</p>
     <p><strong>What?s wrong using HashMap in multithreaded environment? When
@@ -456,7 +257,71 @@ http://javarevisited.blogspot.com/2011/03/10-interview-questions-on-singleton.ht
       question in this blog and you can easily find relevant post by using
       search box at top right corner of this page.<br>
       Core Java Interview Questions and Answers</p>
-    <p><br>
+    <p><strong><br>
+        Difference between ArrayList and linked list? </strong></p>
+    <p>When to use ArrayList vs LinkdedList </p>
+    <p>Before comparing differences of ArrayList and LinkedList, let's see What
+      is common between ArrayList and LinkedList in Java : </p>
+    <ol>
+      <li>Both ArrayList and LinkedList are implementation of List interface,
+        which means you can pass either ArrayList or LinkedList if a method
+        accepts List interface.</li>
+      <li>Both ArrayList and LinkedList are not synchronized, which means you
+        can not shared them between multiple threads without external
+        synchronization. See here to know How to make ArrayList synchronized in
+        Java.&nbsp;</li>
+      <li>ArrayList and LinkedList are ordered collection e.g. they maintain
+        insertion order of elements i.e. first element will be added on first
+        position. </li>
+      <li>ArrayList and LinkedList also allows duplicates and null unlike any
+        other List implementation e.g. Vector.&nbsp;</li>
+      <li>Iterator of both LinkedList and ArrayList are fail-fast which means
+        they will throw ConcurrentModificationException if collection is
+        modified structurally once Iterator is created. They are different than
+        CopyOnWriteArrayList whose Iterator is fail-safe. </li>
+    </ol>
+    <p>Now let's see some difference between ArrayList and LinkedList and When
+      to use ArrayList and LinkedList in Java. </p>
+    <ol>
+      <li><strong>Data Structure</strong> First difference between ArrayList and
+        LinkedList comes with the fact that ArrayList is backed by Array while
+        LinkedList is backed by LinkedList. This will lead further differences
+        in performance. </li>
+      <li><strong>LinkedList implements Deque</strong> Another difference
+        between ArrayList and LinkedList is that apart from List interface,
+        LinkedList also implements Deque interface, which provides first in
+        first out operations for add() and poll() and several other Deque
+        functions. Also LinkedList is implemented as doubly linked list and for
+        index based operation navigation can happen from either end. </li>
+      <li><strong>Adding element in ArrayList</strong> Adding element in
+        ArrayList is O(1) operation if it doesn't trigger re-size of Array, in
+        which case it becomes O(log(n)) , On the other hand appending an element
+        in LinkedList is O(1) operation, as it doesn't required any navigation.
+      </li>
+      <li><strong>Removing element from a position</strong> In order to remove
+        an element from a particular index e.g. by calling remove(index),
+        ArrayList performs a copy operation which makes it close to O(n) while
+        LinkedList needs to traverse to that point which also makes it O(n/2),
+        as it can traverse from either direction based upon proximity. </li>
+      <li>Iterating over ArrayList or LinkedList Iteration is O(n) operation for
+        both LinkedList and ArrayList where n is number of element. </li>
+      <li>Getting element from a position get(index) operation is O(1) in
+        ArrayList while its O(n/2) in LinkedList, as it needs to traverse till
+        that entry. </li>
+      <li>Memory LinkedList uses a wrapper object, Entry, which is a static
+        nested class for storing data and two nodes next and previous while
+        ArrayList just store data in Array. So memory requirement seems less in
+        case of ArrayList than LinkedList except the case where Array performs
+        re-size operation, when it copies content from one Array to another. If
+        Array is large enough it may take lot of memory at that point and
+        trigger Garbage collection, which can slow response time. </li>
+    </ol>
+    <p>From all the above differences between ArrayList vs LinkedList, It looks
+      ArrayList is better choice than LinkedList in almost all cases, except
+      when you do a frequent add() operation than remove() or get(). In my
+      opinion use ArrayList over LinkedList for most of practical purpose. Read
+      more:
+      http://java67.blogspot.com/2012/12/difference-between-arraylist-vs-LinkedList-java.html#ixzz3fENIjRsX
       Some of the Interview questions for senior developers :</p>
     <p>1. Difference between Abstract class and Interface - given a situation
       what would you choose between abstract class and interface? (answer)<br>
@@ -623,6 +488,5 @@ http://javarevisited.blogspot.com/2011/03/10-interview-questions-on-singleton.ht
         &nbsp;&nbsp;&nbsp; }</u></p>
     <p><u extends="" number="">Multiple Bounds&nbsp; <t b1="" b2="" b3="" extends=""></t></u></p>
     <p><u extends="" number="">&nbsp;</u></p>
-    
   </body>
 </html>

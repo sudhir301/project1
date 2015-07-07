@@ -4,8 +4,6 @@
   "links" : [
     {"displayName" : "FAQ 1",    "displayUrl" :"javacore/1faq.html"},
     {"displayName" : "FAQ 2",    "displayUrl" :"javacore/2faq.html"},
-    
-    {"displayName" : "Sample",    "displayUrl" :"javacore/sample.html"},
     {"displayName" : "Collections",    "displayUrl" :"javacore/Collections.html"},
     {"displayName" : "CountDownLatch",    "displayUrl" :"javacore/CountDownLatch.html"},
     {"displayName" : "Cyclic Barrier",    "displayUrl" :"javacore/CyclicBarrier.html"},
@@ -14,12 +12,14 @@
     {"displayName" : "Fail Fast Fail Safe",    "displayUrl" :"javacore/FailFastFailSafe.html"},
     {"displayName" : "Garbage Collection",    "displayUrl" :"javacore/garbageCollector.html"},
     {"displayName" : "Immutable class",    "displayUrl" :"javacore/immutableClass.html"},
-    {"displayName" : "String Literal",    "displayUrl" :"javacore/stringLiteral.html"}
+    {"displayName" : "String Literal",    "displayUrl" :"javacore/stringLiteral.html"},
+    {"displayName" : "Singleton",    "displayUrl" :"javacore/singleton.html"}
   ]},{
   "categoryName" : "Other",
   "links" : [
   	{"displayName" : "Unix",    "displayUrl" :"other/unix.html"},
-  	{"displayName" : "Agile",    "displayUrl" :"other/agile.html"}
+  	{"displayName" : "Agile",    "displayUrl" :"other/agile.html"},
+  	{"displayName" : "Sample",    "displayUrl" :"other/sample.html"}
   
   ]}
   ]
